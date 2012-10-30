@@ -1,0 +1,16 @@
+\section{The axioms for vector spaces}
+
+\begin{enumerate}
+ \item The sum of $\uvec$ and $\vvec$, denoted by $\uvec + \vvec$, is in V.
+ \item $\uvec + \vvec = \vvec + \uvec$.
+ \item $(\uvec + \vvec) + \wvec = \uvec + (\vvec + \wvec)$.
+ \item There is a $\vec{\text{zero}}$ vector $\vec{0}$ in V such that $\uvec + \vec{0} = \uvec$.
+ \item For each $\uvec$ in V, there is a vector $-\uvec$ in V such that $\uvec + (-\uvec) = \vec{0}$.
+ \item The scalar multiple of $\uvec$ by $c$, denoted by $c\uvec$, is in V.
+ \item $c(\uvec + \vvec) = c\uvec + c\vvec$.
+ \item $(c + d)\uvec = c\uvec + d\uvec$.
+ \item $c(d\uvec) = (cd\uvec)$.
+ \item $1\uvec = \uvec$.
+\end{enumerate}
+
+
