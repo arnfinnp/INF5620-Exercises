@@ -1,0 +1,5 @@
+\begin{equation}
+  \uvec = \sum_{j=0}^{N} c_j \varphi_j
+\end{equation}
+
+

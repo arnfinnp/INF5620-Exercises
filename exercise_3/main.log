@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.8.30)  30 OCT 2012 12:16
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.8.30)  30 OCT 2012 18:05
 entering extended mode
  %&-line parsing enabled.
 **main.tex
@@ -526,51 +526,65 @@ LaTeX Info: Redefining \pageref on input line 6.
 \openout3 = `main.out'.
 
 \AtBeginShipoutBox=\box63
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 11.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 10.
  (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 11.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 10.
 
 (/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 11.
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 10.
 
 
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 11.
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 10.
 
 
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 11.
+(Font)              <12> on input line 10.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 11.
+(Font)              <8> on input line 10.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 11.
-LaTeX Font Info:    Try loading font information for U+msa on input line 11.
+(Font)              <6> on input line 10.
+LaTeX Font Info:    Try loading font information for U+msa on input line 10.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 11.
+LaTeX Font Info:    Try loading font information for U+msb on input line 10.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-) (./exercise_1.tex
+) (./exercise_3.tex
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 4.
+(Font)              <10> on input line 1.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 4.
+(Font)              <7> on input line 1.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 4.
-)
-[1
+(Font)              <5> on input line 1.
+
+Underfull \hbox (badness 10000) in paragraph at lines 12--13
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 14--17
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--20
+
+ []
+
+) [1
 
 
 
@@ -578,24 +592,27 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 7822 strings out of 495061
- 109477 string characters out of 1182621
+ 7797 strings out of 495061
+ 109222 string characters out of 1182621
  220918 words of memory out of 3000000
- 10798 multiletter control sequences out of 15000+50000
- 58489 words of font info for 56 fonts, out of 3000000 for 9000
+ 10782 multiletter control sequences out of 15000+50000
+ 52492 words of font info for 54 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  42i,6n,60p,292b,304s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/
-texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-
-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fon
-ts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></
-usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/
-public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/sh
-are/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/
-lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
-Output written on main.pdf (1 page, 135563 bytes).
+texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-math
+ex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fon
+ts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}</
+usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/
+public/lm/lmbx7.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/sh
+are/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public
+/lm/lmmi7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/tex
+mf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr1
+7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr7.pfb></usr/share/texmf/fonts/
+type1/public/lm/lmsy10.pfb>
+Output written on main.pdf (1 page, 152550 bytes).
 PDF statistics:
- 63 PDF objects out of 1000 (max. 8388607)
- 13 named destinations out of 1000 (max. 500000)
- 9 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 61 PDF objects out of 1000 (max. 8388607)
+ 5 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

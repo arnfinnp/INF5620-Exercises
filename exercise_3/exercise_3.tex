@@ -1,0 +1,25 @@
+$\vec{f} = (1,1,1)$, $\varphi_0 = (1,0,0)$, $\varphi_1 = (0,1,0)$\\
+$V = \text{span}\{\varphi_0, \varphi_1 \}$ $\uvec \in V$ 
+
+\begin{equation}
+  \uvec = \sum_{j=0}^{N} c_j \varphi_j
+\end{equation}
+
+\begin{equation}
+  \sum_{j=0}^{N} A_{i,j} c_j = b_i \qquad i = 0,1,2,...,N
+\end{equation}
+
+$A_{i,j} = ( \vec{\varphi_{i}}, \vec{\varphi_{j}})$ and $b_{i} = ( \vec{\varphi_{i}}, \vec{f})$.\\
+
+$A_{0,0} = ( \vec{\varphi_{0}}, \vec{\varphi_{0}}) = 1$.\\
+$A_{1,0} = ( \vec{\varphi_{1}}, \vec{\varphi_{0}}) = 0 = A_{0,1}$ .\\
+$A_{1,1} = ( \vec{\varphi_{1}}, \vec{\varphi_{1}}) = 1$.\\
+
+$b_{0} = ( \vec{\varphi_{0}}, \vec{f}) = 1$.\\
+$b_{1} = ( \vec{\varphi_{1}}, \vec{f}) = 1$.\\
+
+This leads to $c_0 = 1$ and $c_1 = 1$ if we now insert this into eq.(1), we get
+
+\begin{equation}
+  \uvec = (1,0,0) + (0,1,0) = (1,1,0)
+\end{equation}
