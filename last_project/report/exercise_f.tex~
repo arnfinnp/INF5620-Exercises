@@ -1,2 +1,5 @@
 \section{exercise f}
 
+When we are doing numerics on a computer there will always be some numerical errors due to numerical precision.\\
+We have also used Backward Euler which have a truncation error in time $\mathcal{O}(\Delta t)$. And the error for
+FEM $\mathcal{O}(\Delta x)$
