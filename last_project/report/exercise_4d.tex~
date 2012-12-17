@@ -1,0 +1,34 @@
+
+From fig.(\ref{fig:P_T1}) we can see that $\Delta E = 8$ dominates for $T = 1.0 k_B T$. This probably means that our system has all spins pointed in positive direction, and the
+probability to accept the new configuration is very small. From fig.(\ref{fig:P_T24}) we can also see that $\Delta E = 8$ dominates, but not as much as for $T = 1.0 k_B T$. 
+This is because when our system reaches steady state, most of the spins point in the same direction and the probability of getting $\Delta E = 8$ is larger than the probability of getting 
+the other energies.\\
+As we can see from fig.(\ref{fig:var}), the variance for $T = 1.0 k_B T$ is much lower and more stable than for $T = 2.4 k_B T$. This is because the system for
+$T = 2.4 k_B T$ has a higher probability of getting $\Delta E \neq= 8$ then the system for $T = 1.0 k_B T$. This means that the system for $T = 2.4 k_B T$ will get more
+energy fluctuations than the system for $T = 1.0 k_B T$.
+
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/P_T1.png}
+\end{center}
+\caption{The figure show the probability of getting different $\Delta E$ for $T = 1.0 k_B T$.}
+\label{fig:P_T1}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/P_T24.png}
+\end{center}
+\caption{The figure show the probability of getting different $\Delta E$ for $T = 1.0 k_B T$.}
+\label{fig:P_T24}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/Variance.png}
+\end{center}
+\caption{The variance(E) as a function of Monte Carlo cycles for $T = 1.0 k_B T$ and $T = 2.4 k_B T$.}
+\label{fig:var}
+\end{figure}

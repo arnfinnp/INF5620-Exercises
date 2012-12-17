@@ -1,0 +1,110 @@
+\section{Gauss-Laguerre}
+In this method we use Laguerre polynomials to solve our integral. The polynomials are defined for $x \in [0, \infty)$.
+We can change the coordinates in eq.(\ref{eq:correlationenergy}) from Cartesian coordinates to spherical coordinates.
+
+\begin{equation}
+  d\rvec_1 d\rvec_2 = r_1^2 r_2^2 \sin(\theta_1) \sin(\theta_2) dr_1 dr_2 d\theta_1 d\theta_2 d\phi_1 d\phi_2
+\end{equation}
+
+and 
+
+\begin{equation}
+  \frac{1}{|{\bf r}_1-{\bf r}_2|} = \frac{1}{\sqrt{r_1^2 + r_2^2 - 2 r_1 r_2 \cos(\beta)}}
+\end{equation}
+
+where $\cos(\beta) = \cos(\theta_1) \cos(\theta_2) + \sin(\theta_1) \sin(\theta_2) \cos(\phi_1 - \phi_2)$. Our integral in eq.(\ref{eq:correlationenergy}) then becomes
+
+\begin{align}
+  &\langle \frac{1}{|{\bf r}_1-{\bf r}_2|} \rangle = \\
+  & \int_0^{\infty} dr_1 \int_0^{\infty} dr_2 \int_0^{\pi} d\theta_1 \int_0^{\pi} d\theta_2 \int_0^{2\pi} d\phi_1 \int_0^{2\pi} d\phi_2
+  r_1^2 r_2^2 \sin(\theta_1) \sin(\theta_2) \frac{e^{-2\alpha(r_1 + r_2)}}{\sqrt{r_1^2 + r_2^2 - 2 r_1 r_2 \cos(\beta)}}
+\end{align}
+
+The Gauss-Laguerre method uses a weight function $W(x) = x^{\alpha} e^{-x}$. If we have an integral $I = \int_0^{\infty} f(x) dx$ this leads to a new
+integral $I = \int_0^{\infty}  W(x) g(x) dx$. \\
+So given a function $f(r_1) = r_1^2 e^{-r_1}$ gives us the integral
+
+\begin{equation}
+  I = \int_0^{\infty} f(r_1) dr_1 = \int_0^{\infty} r_1^2 e^{-r_1} g(r_1) dr_1
+\end{equation}
+
+where $g(r_1) = 1$ and $\alpha = 2$. \\
+If we take a look at our 6-dim. integral, we can see that it's almost on the same form as the integral above, we only need to tweak it a little bit.
+If we do the substitution $u_1 = 2\alpha r_1$ and $u_2 = 2\alpha r_2$, we end up with the equation
+
+\begin{align*}
+  &\langle \frac{1}{|{\bf r}_1-{\bf r}_2|} \rangle \\
+  =& \int_0^{\infty} \frac{1}{2\alpha} du_1 \int_0^{\infty} \frac{1}{2\alpha} du_2 \int_0^{\pi} d\theta_1 \int_0^{\pi} d\theta_2 \int_0^{2\pi} d\phi_1 \int_0^{2\pi} d\phi_2
+  \frac{1}{(2\alpha)^4} u_1^2 u_2^2 \sin(\theta_1) \sin(\theta_2) \frac{e^{-(u_1 + u_2)}}{\frac{1}{2\alpha}\sqrt{u_1^2 + u_2^2 - 2 u_1 u_2 \cos(\beta)}} \\
+  =&\frac{1}{(2\alpha)^5} \int_0^{\infty}  du_1 \int_0^{\infty} du_2 \int_0^{\pi} d\theta_1 \int_0^{\pi} d\theta_2 \int_0^{2\pi} d\phi_1 \int_0^{2\pi} d\phi_2
+  u_1^2 u_2^2 \sin(\theta_1) \sin(\theta_2) \frac{e^{-(u_1 + u_2)}}{\sqrt{u_1^2 + u_2^2 - 2 u_1 u_2 \cos(\beta)}}
+\end{align*}
+
+When we use the Gauss-Laguerre method, we need to evaluate the integral
+
+\begin{align*}
+  \langle \frac{1}{|{\bf r}_1-{\bf r}_2|} \rangle=
+ \frac{1}{(2\alpha)^5} \int_0^{\infty}  du_1 \int_0^{\infty} du_2 \int_0^{\pi} d\theta_1 \int_0^{\pi} d\theta_2 \int_0^{2\pi} d\phi_1 \int_0^{2\pi} d\phi_2
+ \frac{\sin(\theta_1) \sin(\theta_2)}{\sqrt{u_1^2 + u_2^2 - 2 u_1 u_2 \cos(\beta)}}
+\end{align*}
+
+What we need to solve numerically is
+
+\begin{equation}
+    \sum_{i,j,k,l,m,n = 1}^N
+    \omega^{u_1}_i \omega^{u_2}_j \omega^{\theta_1}_k \omega^{\theta_2}_i \omega^{\phi_2}_i \omega^{\phi_2}_i
+    \frac{\sin(\theta_{1_k}) \sin(\theta_{2_l})}{\sqrt{u_{1_i}^2 + u_{2_j}^2 - 2 u_{1_i} u_{2_j} \cos(\beta_{k,l,m,n})}}
+    \label{numerical_gauss-laguerre}
+\end{equation}
+
+We use Gauss-Laguerre to find the weights and integration points for $u_1$ and $u_2$, and we use Gauss-Legendre to find the weights and integration points
+for $d\theta_1, d\theta_2, d\phi_1$ and $d\phi_2$. The results are shown in table(\ref{ex_b_r_5}) and fig.(\ref{ex_b_convergence}). We can see that when we 
+use a combination of Gauss-Laguerre and Gauss-Legendre, we see that we get results higher than the exact result. This is something that I did not expect, and
+I have no idea why it happens.
+
+From table(\ref{time_used_quadrature}) we can see that Gauss-Laguerre is a much slower method than Gauss-Legendre, but as we can see from our results, it 
+Gauss-Legendre is probably worth the extra CPU time. \\
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ |c|c|c|c|}
+  \hline
+  $n$   & $\text{I}_{\text{numerical}}$ & $\text{I}_{\text{exact}}$ & Error \\ \hline
+  $10$  & $0.186457$ & 0.192766 &  0.006309 \\ \hline
+  $20$  & $0.191082$ & 0.192766 &  0.001684 \\ \hline
+  $30$  & $0.192114$ & 0.192766 &  0.000652 \\ \hline
+  $40$  & $0.192493$ & 0.192766 &  0.000273 \\ \hline
+  $50$  & $0.192668$ & 0.192766 &  0.000098 \\ \hline
+  $60$  & $0.192758$ & 0.192766 &  0.000008 \\ \hline
+  $70$  & $0.192809$ & 0.192766 & -0.000043 \\ \hline
+  $80$  & $0.192839$ & 0.192766 & -0.000073 \\ \hline
+  $90$  & $0.192857$ & 0.192766 & -0.000091 \\ \hline
+  $100$ & $0.192868$ & 0.192766 & -0.000102 \\ \hline
+\end{tabular}
+\caption{The table show the results from the numerical solution of eq.(\ref{numerical_gauss-laguerre}), the exact solution, $\frac{5\pi^2}{16^2} \approx 0.192766$, and the error}
+\label{ex_b_r_5}
+\end{center}
+\end{table}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.5]{images/gauss-laguerre.png}
+\end{center}
+\caption{The figure shows the convergence of the numerical solution of the integral in eq.(\ref{eq:correlationenergy}) using Gauss-Laguerre integration}
+\label{ex_b_convergence}
+\end{figure}
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ |r|r|r|}
+  \hline
+  $N$   & Legendre & Laguerre \\ \hline
+  $10$  & $0.02$   & $0.05$ \\ \hline
+  $20$  & $1$      & $3$ \\ \hline
+  $30$  & $12$     & $34$ \\ \hline
+  $40$  & $67$     & $181$ \\ \hline
+\end{tabular}
+\caption{The time the used by Gauss-Legendre and Gauss-Laguerre to calculate the integral for different integration points. The time is given in seconds and the number of cores used is $4$}
+\label{time_used_quadrature}
+\end{center}
+\end{table}

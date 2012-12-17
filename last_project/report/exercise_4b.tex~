@@ -1,0 +1,78 @@
+\section{Numerical solution of the 2 x 2 Ising model}
+
+The algorithm is quite easy to program, it is actually just a few lines of code.
+
+\begin{lstlisting}
+  sum = 0
+  for mc = 0,1,2,...,MC cycles
+    for x = 0,1,2,...,Nx
+      for y = 0,1,2,...,Ny
+	i = some random number that is in the range of x
+	j = some random number that is in the range of y	
+	DeltaE = Change of energy when we flip the spin (i,j)	
+	r = some random number [0,1]
+	w = exp(-DeltaE/temperature)
+	if r <= w
+	  We keep the new spin configuration.
+	  Update the system energy
+	  Update the magnetization of the system	    
+\end{lstlisting}
+
+In fig.(\ref{fig:E_2x2}), (\ref{fig:abs_M_2x2}), (\ref{fig:Cv_2x2}) and (\ref{fig:X_2x2}) we can see how the results from our numerical Ising model converges towards some value for 
+$E$, $|\mathcal{M}|$, $C_V$ and $\chi$. In table (\ref{table:ex_b}) I compare the results from the $2 \times 2$ numerical Ising model with the analytical $2 \times 2$ numerical Ising model.
+As we can see, the results from the numerical solution is quite good for $10^6$ Monte Carlo cycles and higher. We can see that something strange is happening at $10^4$ Monte Carlo cycles,
+so it is not a good idea to use less than $10^5$ Monte Carlo cycles. When we decide how many Monte Carlo cycles we would like to use in our program, we have to decide how much getting 
+very good results is worth to us compared to the time it takes us to get the results. If we use $10^9$ Monte Carlo cycles the program will use $1000$ times more time than if we use
+$10^6$ Monte Carlo cycles. For bigger systems this can be a big deal.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}\hline
+  $MC$      & $E$        & $|\mathcal{M}|$ & $C_V$     & $\chi$    \\ \hline  
+  $10^3$    & $-1.9956$  & $0.9983$        & $0.0355$  & $0.0055$  \\ 
+  $10^4$    & $-1.9971$  & $0.9992$        & $0.0231$  & $0.0021$  \\
+  $10^5$    & $-1.9958$  & $0.9985$        & $0.0339$  & $0.0046$  \\
+  $10^6$    & $-1.9959$  & $0.9986$        & $0.0326$  & $0.0042$  \\
+  $10^7$    & $-1.9959$  & $0.9986$        & $0.0325$  & $0.0040$  \\
+  $10^8$    & $-1.9960$  & $0.9987$        & $0.0321$  & $0.0040$  \\
+  $10^9$    & $-1.9960$  & $0.9987$        & $0.0322$  & $0.0040$  \\ \hline
+Analytical  & $-1.99598$ & $0.99866$       & $0.32075$ & $0.00402$ \\ \hline
+\end{tabular}
+\caption{The table compares the results from the numerical $2 \times 2$ Ising model with the analytical}
+\label{table:ex_b}
+\end{center}
+\end{table}
+                                                                                         
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/E_2x2.png}
+\end{center}
+\caption{The plot shows the energy, $E$, as a function of Monte Carlo cycles for the $2 \times 2$ numerical Ising model. The results are given per spin}
+\label{fig:E_2x2}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/abs_M_2x2.png}
+\end{center}
+\caption{The plot shows the absolute value of the magnetization, $|\mathcal{M}|$, as a function of Monte Carlo cycles for the $2 \times 2$ numerical Ising model. The results are given per spin}
+\label{fig:abs_M_2x2}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/Cv_2x2.png}
+\end{center}
+\caption{The plot shows the specific heat, $C_V$, as a function of Monte Carlo cycles for the $2 \times 2$ numerical Ising model. The results are given per spin}
+\label{fig:Cv_2x2}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/X_2x2.png}
+\end{center}
+\caption{The plot shows the susceptibility, $\chi$, as a function of Monte Carlo cycles for the $2 \times 2$ numerical Ising model. The results are given per spin}
+\label{fig:X_2x2}
+\end{figure}
+
+\newpage

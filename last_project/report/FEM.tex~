@@ -1,0 +1,44 @@
+\section{How to: Finite Element}
+
+\subsection{Mapping to a reference element}
+
+Given the integral for the elements
+
+\begin{equation}
+ \tilde{A}^{(e)}_{r,s} = \int_{\Omega^(e)} \varphi_{q(e,r)}(x) \varphi_{q(e,s)}(x) dx
+\end{equation}
+
+We are now going to map this to the reference element domain $[-1,1]$. We do this by using 
+a linear mapping form $x$ to $X$
+
+\begin{equation}
+ x = x_m + \frac{1}{2}h X
+\end{equation}
+
+where $x_m = (x_L + x_R)/2$ and $h = x_R - x_L$. $x_R$ and $x_L$ are the boundaries of the arbitrary element.
+The basis function, $\varphi_r(x)$, is transformed as
+
+\begin{equation}
+ \tilde{\varphi}_r(X) = \varphi_{q(e,r)}(x(X))
+\end{equation}
+
+to the reference element.
+This gives us 
+
+\begin{equation}
+ \tilde{A}^{(e)}_{r,s} = \int_{-1}^1 \tilde{\varphi}_r(X) \tilde{\varphi}_a(X) \frac{dx}{dX} dX
+\end{equation}
+
+in the reference element. $dx/dX$ is the so called stretch factor, and it is the Jacobi determinant in 2D and 3D. In 1D the stretch factor is given as $dx/dX = h/2$. The mapping of 
+$\tilde{b}_r^{(e)}$ to the reference element is
+
+\begin{equation}
+ \tilde{b}_r^{(e)} = \int_{-1}^1 f(x(X)) \tilde{\varphi}_a(X) \frac{dx}{dX} dX
+\end{equation}
+
+For P1 elements, elements with only two nodes, one in each end, our $\tilde{\varphi}_r(X)$ is given as
+
+\begin{align*}
+ \tilde{\varphi}_0(X) &= \frac{1}{2}(1 - X) \\
+ \tilde{\varphi}_1(X) &= \frac{1}{2}(1 + X) \\
+\end{align*}

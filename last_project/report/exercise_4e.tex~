@@ -1,0 +1,101 @@
+\newpage
+\section{Numerical solution for the Ising model at $T_C$}
+
+In both fig.(\ref{fig:abs_M_e}), (\ref{fig:Cv_e}) and (\ref{fig:X_e}) we can see some indications of a face transition. In fig.(\ref{fig:abs_M_e}) it is not that easy to 
+see it for low grid sizes, but we can see that something is about to happen at larger systems.\\
+In table (\ref{table:ex_f}) we have listed the critical temperature, $T_C$, that we found in fig.(\ref{fig:abs_Cv_e}) and fig.(\ref{fig:abs_X_e}). We can now use these to estimate 
+$T_C$ when the system size $L \rightarrow \infty$. This is given by the equation
+
+\begin{equation}
+ T_C(L) - T_C(L = \infty) = aL^{-1/\nu}
+\end{equation}
+In our case $\nu = 1$.
+
+We now have two unknown and four equations, but because the finite size effects is smaller for $L = 60$ and $L = 80$ we only use them.
+
+\begin{align}
+ T_C(L = \infty) &=  T_C(60) - \frac{a}{60} \\
+ T_C(L = \infty) &=  2.29 - \frac{a}{60} \\
+ a &= 60(2.29 - T_C(L = \infty))
+\end{align}
+
+\begin{align}
+ T_C(L = \infty) &=  T_C(60) - \frac{a}{80} \\
+ T_C(L = \infty) &=  2.28 - \frac{a}{80} \\
+ T_C(L = \infty) &=  2.28 - \frac{ 60(2.29 - T_C(L = \infty)}{80}
+\end{align}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|}\hline
+  $L$               & $T_C$ fig.(\ref{fig:abs_Cv_e}) & $T_C$ fig.(\ref{fig:abs_X_e})  \\ \hline  
+  $20 \times 20$    & $2.31$                         &  $2.36$                        \\ 
+  $40 \times 40$    & $2.285$                        &  $2.31$                        \\
+  $60 \times 60$    & $2.29$                         &  $2.3$                        \\
+  $80 \times 80$    & $2.28$                         &  $2.295$                        \\ \hline
+\end{tabular}
+\caption{Estimated $T_C$ from fig.(\ref{fig:abs_M_e}), (\ref{fig:Cv_e}) and (\ref{fig:X_e})}
+\label{table:ex_f}
+\end{center}
+\end{table}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/E_e.png}
+\end{center}
+\caption{The figure shows the average energy, $E$ as a function of temperature for a $20 \times 20$, $40 \times 40$, $60 \times 60$ and $80 \times 80$ system, with $\Delta T = 0.005$}
+\label{fig:E_e}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/abs_M_e.png}
+\end{center}
+\caption{The figure shows the absolute value of the magnetization, $|\mathcal{M}|$, as a function of temperature for a $20 \times 20$, $40 \times 40$, $60 \times 60$ and $80 \times 80$ system, with $\Delta T = 0.005$}
+\label{fig:abs_M_e}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/Cv_e.png}
+\end{center}
+\caption{The figure shows the specific heat, $C_V$, as a function of temperature for a $20 \times 20$, $40 \times 40$, $60 \times 60$ and $80 \times 80$ system, with $\Delta T = 0.005$}
+\label{fig:Cv_e}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/X_e.png}
+\end{center}
+\caption{The figure shows the susceptibility, $\chi$, as a function of temperature for a $20 \times 20$, $40 \times 40$, $60 \times 60$ and $80 \times 80$ system, with $\Delta T = 0.005$}
+\label{fig:X_e}
+\end{figure}
+
+\section{Parallelization}
+
+The parallelization of the code is easy to do, if we do it at the right place. I chose to parallelize the temperatures. This means that
+each process gets some temperatures and runs the whole Ising model with that temperature. All processes will use approximately the same amount of time if 
+they get the same amount of temperatures.
+
+\begin{lstlisting}
+    vec T = linspace<vec>(T_min, T_max, T_N);
+    
+    my_T = (T_N - (T_N % num_procs))/num_procs;
+    my_T_start = my_rank*my_T;
+
+    for (int i = 0; i < T_N % num_procs; i++){
+        if (my_rank == i){
+            my_T += 1;
+        }
+        if (my_rank > i)
+            my_T_start += 1;
+    }    
+    for (int temperature = my_T_start; temperature < my_T_start+my_T; temperature++){
+      "Run the Ising model"
+    }
+    
+    MPI_Allreduce(&my_saveData(0),&saveData(0),16*T_N,MPI_DOUBLE,MPI_SUM,MPI_COMM_WORLD);
+    if (my_rank == 0){
+        saveData.save(filename,raw_ascii);
+    }
+\end{lstlisting}

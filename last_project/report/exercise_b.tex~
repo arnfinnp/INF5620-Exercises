@@ -1,0 +1,71 @@
+\section{exercise b}
+
+Picard iteration is used for making non-linear PDE's behave like linear PDE's. In our case this is done by using $u$ from the last time step in $\alpha(u)$. 
+This means that we now have a known expression for $\alpha(u)$. With Picard iteration eq.(3) becomes
+
+\begin{equation}
+  a(u,v) = (\rho(u,v) + \Delta t (\alpha(u_1) \nabla u,\nabla v))dx
+\end{equation}
+
+and eq.(4) is unchanged
+
+\begin{equation}
+ L(v) = (\rho(I(\vec{x}),v)  + \Delta t(f^n,v))dx
+\end{equation}
+
+\lstset{
+language=Python,
+basicstyle=\footnotesize,
+backgroundcolor=\color{grey}
+}
+Since the Neumann conditions have $\partial u/ \partial n = 0$ we can omit the boundary integral from the weak form. We then only need to take care of Dirichlet conditions at two sides.
+
+\begin{lstlisting}
+  tol = 1E-14
+  def Dirichlet_boundary0(x, on_boundary): 
+      return on_boundary and abs(x[0]) < tol
+      
+  def Dirichlet_boundary1(x, on_boundary):
+      return on_boundary and abs(x[0] - 1) < tol
+      
+  bc0 = DirichletBC(V, Constant(0), Dirichlet_boundary0)
+  bc1 = DirichletBC(V, Constant(1), Dirichlet_boundary1)
+  
+  bcs = [bc0, bc1]
+\end{lstlisting}
+
+\begin{lstlisting}
+
+  def alpha(u):
+      return ...
+      
+  def f(x,t):
+      return ...
+      
+  u = TrialFunction(V)
+  v = TestFunction(V)
+  
+  u_k = interpolate(I(x), V)
+  
+  a = (rho*inner(u, v) + dt*inner(alpha(u_k)*nabla_grad(u), nabla_grad(v))*dx
+  L = (rho*inner(u_k,v) + dt*inner(f(x,t), v))*dx
+\end{lstlisting}
+
+
+
+The Picard iterations 
+
+\begin{lstlisting}
+  u = Function(V)
+  eps = 1.0
+  tol = 1.0E-5
+  iter = 0
+  maxiter = 25
+  
+  while eps > tol and iter < maxiter:
+      iter += 1
+      solve(a == L, u, bcs)
+      diff = u.vector().array() - u_k.vector().array()
+      eps = numpy.linalg.norm(diff, ord=numpy.Inf)
+      u_k.assign(u)
+\end{lstlisting}

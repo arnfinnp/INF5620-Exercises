@@ -1,0 +1,218 @@
+\section{Exercise 2c}
+In this exercise we'll study two electrons in a harmonic oscillator well which also interact via a repulsive Coulomb interaction.
+
+\subsection{Theory}
+The Schr\"odinger equation for two electrons with no repulsive Coulomb interaction is given as
+
+\[
+\left(  -\frac{\hbar^2}{2 m} \frac{d^2}{d\vec{r}_1^2} -\frac{\hbar^2}{2 m} \frac{d^2}{d\vec{r}_2^2}+ \frac{1}{2}k \vec{r}_1^2+ \frac{1}{2}k \vec{r}_2^2\right)u(\vec{r}_1,\vec{r}_2)  = E^{(2)} u(\vec{r}_1,\vec{r}_2) .
+\]
+
+Where $E^{(2)}$ is the two-electron energy, and $u(\vec{r}_1,\vec{r}_2)$ is the two-electron wave function.
+
+We introduce the relative coordinate $\vec{r} = \vec{r}_1 - \vec{r}_2$ and the center-of-mass coordinate $\vec{R} = \frac{1}{2}(\vec{r}_1 + \vec{r}_2)$.
+We now get the radial Schr\"odinger equation
+
+\[
+\left(  -\frac{\hbar^2}{m} \frac{d^2}{d\vec{r}^2} -\frac{\hbar^2}{4 m} \frac{d^2}{d\vec{R}^2}+ \frac{1}{4} k \vec{r}^2+  k\vec{R}^2\right)u(\vec{r},\vec{R})  = E^{(2)} u(\vec{r},\vec{R}).
+\]
+
+Because $u(\vec{r},\vec{R})$ is separable, we can write it as a product of two functions $u(\vec{r},\vec{R}) = \psi(\vec{r})\phi(\vec{R})$. 
+This means that we can separate the Schr\"odinger equation into two equations. One which includes the variable $\vec{r}$ and one which includes the variable $\vec{R}$
+
+The energy $E^{(2)}$ is now given as $E^{(2)} = E_r + E_R$
+
+We now add the Coulomb potential between the two electrons 
+
+\[
+V(r_1,r_2) = \frac{\beta e^2}{|{\bf r}_1-{\bf r}_2|}=\frac{\beta e^2}{r},
+\]
+with $\beta e^2=1.44$ eVnm.
+This is only dependent on $\vec{r}$ and we the new $\vec{r}$-dependent Schr\"odinger equation
+
+\[
+\left(  -\frac{\hbar^2}{m} \frac{d^2}{d\vec{r}^2}+ \frac{1}{4}k \vec{r}^2+\frac{\beta e^2}{r}\right)\psi(\vec{r})  = E_\vec{r} \psi(\vec{r}).
+\]
+
+By introducing a dimensionless variable $\rho = \frac{r}{\alpha}$, we can rewrite our equation and get a new Schr\"odinger equation
+
+\[
+  -\frac{d^2}{d\rho^2} \psi(\rho) 
+       + \frac{1}{4}\frac{mk}{\hbar^2} \alpha^4\rho^2\psi(\rho)+\frac{m\alpha \beta e^2}{\rho\hbar^2}\psi(\rho)  = 
+\frac{m\alpha^2}{\hbar^2}E_r \psi(\rho) .
+\]
+
+This looks kind of messy at first glance, but most of the constants can be put into new constants. We introduce the frequency
+
+\[
+\omega_r^2=\frac{1}{4}\frac{mk}{\hbar^2} \alpha^4,
+\]
+
+and 
+
+\[
+\lambda = \frac{m\alpha^2}{\hbar^2}E,
+\]
+
+We also require that 
+
+\[
+\frac{m\alpha \beta e^2}{\hbar^2}=1
+\]
+
+Which gives us
+
+\[
+\alpha = \frac{\hbar^2}{m\beta e^2}.
+\]
+
+We now get a nicer looking Schr\"odinger equation
+
+\[
+  -\frac{d^2}{d\rho^2} \psi(\rho) + \omega_r^2\rho^2\psi(\rho) +\frac{1}{\rho} = \lambda \psi(\rho).
+\]
+
+We can now rewrite the Schr\"odinger equation to a 'numerical' form
+
+\[
+ -\frac{u_{i+1} - 2u_{i} + u_{i-1}}{h^2} + \omega_r^2 \rho_i u_i + \frac{1}{\rho_i}u_i = \lambda u_i
+\]
+or
+\[
+ -\frac{u_{i+1} - 2u_{i} + u_{i-1}}{h^2} + \left( \omega_r^2 \rho_i + \frac{1}{\rho_i}\right) u_i = \lambda u_i
+\]
+\[
+ -\frac{u_{i+1} - 2u_{i} + u_{i-1}}{h^2} + V_i u_i = \lambda u_i
+\]
+
+Where $V_i = \omega_r^2 \rho_i + \frac{1}{\rho_i}$
+
+We can now solve the same tridiagonal matrix as we did in a), only with a different potential.
+
+\subsection{Results}
+
+With no repulsive Coulomb interaction, the Schr\"odinger equation will be
+
+\[
+  -\frac{d^2}{d\rho^2} \psi(\rho) + \omega_r^2\rho^2\psi(\rho) = \lambda \psi(\rho), \qquad \omega_r^2=\frac{1}{4}\frac{mk}{\hbar^2} \alpha^4
+\]
+
+and the numerical equation
+
+\[
+ -\frac{u_{i+1} - 2u_{i} + u_{i-1}}{h^2} + \omega_r^2 \rho_i u_i = \lambda u_i
+\]
+\[
+ -\frac{u_{i+1} - 2u_{i} + u_{i-1}}{h^2} + V_i u_i = \lambda u_i
+\]
+
+The results from this equation is
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ |c|c|c|c| }
+  \hline
+  $\omega$ & $\lambda_0$ & $\lambda_1$ & $\lambda_2$ \\ \hline
+  $0.01$ & $0.395489784633$ & $1.57992404008$ & $3.55380406306$ \\ \hline
+  $0.5$ & $1.50031647743$ & $3.51976052634$ & $5.73108239024$\\ \hline
+  $1.0$ & $2.99997837794$ & $6.99989429554$ & $10.9999335302$  \\ \hline
+  $5.0$ & $14.9994592482$ & $34.9972961332$ & $54.9934022865$     \\ \hline
+\end{tabular}
+\caption{Eigenvalues for different $\omega$-values where $n = 600$ and $\rho_{\text{max}} = 5.0$}
+\label{different_omega_no_rep}
+\end{center}
+\end{table}
+
+We see from table(\ref{different_omega_no_rep}) when we choose $\omega = 1.0$ we get the same eigenvalues as we did in b), which is what we expected.
+
+\subsubsection{Code}
+\begin{lstlisting}
+#include <cstdlib>
+#include <iostream>
+#include <armadillo>
+#include <math.h>
+#include <stdio.h>
+#include <ctime>
+#include <iomanip>
+#include <fstream>
+#include <string>
+
+using namespace std;
+using namespace arma;
+
+void Tridiag(mat &, int, double, double, double);
+void initialise(int &, double &, double &, double &);
+
+int main(int argc, char** argv) {
+    clock_t start, finish;
+    double omega;
+    char fileigvec[50];
+    char fileigval[50];
+    double rho_max, rho_min;
+    int n;
+    
+    initialise(n, rho_max, rho_min, omega);
+    
+    sprintf(fileigvec, "eigenvec_rep_n=%d_rho=%1.1f_omega=%1.2f.txt",n,rho_max,omega);
+    sprintf(fileigval, "eigenval_rep_n=%d_rho=%1.1f_omega=%1.2f.txt",n,rho_max,omega);
+        
+    mat A(n,n);
+    vec eigval;
+    mat eigvec;
+    
+    Tridiag(A, n, rho_min, rho_max, omega);  
+      
+    start = clock();
+    eig_sym(eigval, eigvec, A);        // use standard algorithm by default
+    finish = clock();
+    cout << "Time used: " << 1000*((finish - start)/CLOCKS_PER_SEC) << " ms." << endl;
+    
+    cout << "eigen value 1 = " << setw(13) << setprecision(12) << eigval(0) << endl;
+    cout << "eigen value 2 = " << setw(13) << setprecision(12) << eigval(1) << endl;
+    cout << "eigen value 3 = " << setw(13) << setprecision(12) << eigval(2) << endl;
+    eigvec.save(fileigvec,raw_ascii);
+    eigval.save(fileigval,raw_ascii);
+    return 0;
+}
+void Tridiag(mat &A, int n, double rho_min, double rho_max, double omega){
+    double h, e, d;
+    
+    h = (rho_max - rho_min)/(n+1);
+    
+    d = 2.0/(h*h);
+    e = -1.0/(h*h);
+    vec V = linspace<vec>(rho_min+h, rho_max-h, n);
+    
+    A.zeros();
+    
+    for (int i = 0; i < n; i++){
+        A(i,i) = d + omega*omega*V(i)*V(i) + 1.0/V(i);
+        if (i > 0){
+            A(i,i-1) = e;
+            A(i-1,i) = e;
+        }
+    }
+    return;
+}
+
+void initialise(int& n, double& rho_max, double& rho_min, double& omega){
+    cout << endl;
+    cout << "insert n" << endl;
+    cin >> n;
+    cout << "insert rho_max" << endl;
+    cin >> rho_max;
+    cout << "insert omega" << endl;
+    cin >> omega;
+    
+    
+    //n = 400;
+    //omega = 0.1;
+    //rho_max = 5.0;
+    rho_min = 0;
+    
+    cout << "n = " << n << endl;
+    cout << "rho_max = " << rho_max << endl;
+    cout << "omega = " << omega << endl;
+    return;
+}
+\end{lstlisting}

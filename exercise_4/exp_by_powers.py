@@ -36,6 +36,6 @@ def comparison_plot(f, u, Omega, filename='tmp.pdf'):
 x = sm.Symbol('x')
 f = sm.exp(x)
 phi = [1, x, x**2, x**3, x**4, x**5, x**6, x**7]
-Omega = [1, 10]
+Omega = [1, 20]
 u = least_squares(f, phi, Omega)
-comparison_plot(f, u, Omega, 'exp_by_powers.png')
+comparison_plot(f, u, Omega, 'exp_by_powers_20.png')

@@ -1,0 +1,109 @@
+\section{Analytical solution of the 2 x 2 Ising model}
+
+The magnetization, $\mathcal{M}_i$, for our configuration is given as
+
+\begin{equation}
+  \mathcal{M}_i = \sum_{j = 1}^N s_j
+\end{equation}
+
+Where $N$ is the number of spins and $s_j = \pm 1$.
+The energy, $E_i$, for our configuration is given as
+
+\begin{equation}
+  E_i = -J \sum_{\langle kl \rangle}^N s_ks_l 
+\end{equation}
+
+The mean energy is given as
+
+\begin{equation}
+ \langle E \rangle = \frac{\sum_{i=1}^M E_i e^{-\beta E_i}}{\sum_{i=1}^M e^{-\beta E_i}}
+\end{equation}
+
+For our $2\times2$ spin system with $\beta = \frac{1}{k_B T} = 1$, where $T = 1$ and $k_B = 1$, and $M = 16$ we get
+
+\begin{equation}
+ \langle E \rangle = \frac{-8e^{8} + (2*8)e^{-8} -8e^{8}}{e^{8} + 12e^{0} +2e^{-8} +e^{8}} = -7.98393
+\end{equation}
+
+This is the total mean energy for our $2\times2$ spin system, so by dividing $\langle E \rangle$ by $4$ we get the energy per spin: $\langle E \rangle = -1.99598$. \\
+The next property we need to calculate is the $|\mathcal{M}|$, which is the absolute value of the magnetization.
+
+\begin{equation}
+ |\mathcal{M}| = \frac{\sum_{i=1}^M |\mathcal{M}|_i e^{-\beta E_i}}{\sum_{i=1}^M e^{-\beta E_i}} 
+\end{equation}
+
+\begin{equation}
+ |\mathcal{M}| = \frac{4e^{8} + (4*2)e^{0} + (4*2)e^{0} + (4*0)e^{0} + (2*0)e^{-8} + 4e^{8}}{e^{8} + 12e^{0} +2e^{-8} +e^{8}} = 3.99464
+\end{equation}
+
+This is also the absolute value of magnetization for the whole $2\times2$ spin system, and by also dividing this by $4$ we get absolute value of magnetization per spin:
+$|\mathcal{M}| = 0.99866$. Then we have to calculate the specific heat $C_V$, which is given as
+
+\begin{equation}
+ C_V = \frac{1}{k_B T^2} (\langle E^2 \rangle - \langle E \rangle^2)
+\end{equation}
+
+$\langle E^2 \rangle$ is given as
+
+\begin{equation}
+ \langle E^2 \rangle = \frac{\sum_{i=1}^M E_i^2 e^{-\beta E_i}}{\sum_{i=1}^M e^{-\beta E_i}}
+\end{equation}
+
+\begin{equation}
+\langle E^2 \rangle = \frac{8^2e^{8} + (2*8^2)e^{-8} + 8^2e^{8}}{e^{8} + 12e^{0} +2e^{-8} +e^{8}} = 63.87144
+\end{equation}
+
+and $\langle E \rangle^2 = 63.74314$\\
+This gives us for $T = 1$
+
+\begin{equation}
+ C_V = (\langle E^2 \rangle - \langle E \rangle^2) = 63.87144 - 63.74314 = 0.1283
+\end{equation}
+This gives us $C_V = 0.32075$ per spin.
+
+At last we calculate the susceptibility $\chi$, which is given as
+
+\begin{equation}
+ \chi = \frac{1}{k_B T} (\langle \mathcal{M}^2 \rangle - \langle |\mathcal{M}| \rangle^2)
+\end{equation}
+
+$\langle \mathcal{M}^2 \rangle$ is given as
+
+\begin{equation}
+ \langle \mathcal{M}^2 \rangle = \frac{\sum_{i=1}^M \mathcal{M}_i^2 e^{-\beta E_i}}{\sum_{i=1}^M e^{-\beta E_i}}
+\end{equation}
+
+\begin{equation}
+ \langle \mathcal{M}^2 \rangle = \frac{4^2e^{8} + (4*2^2)e^{0} + (4*2^2)e^{0} + (4*0)e^{0} + (2*0)e^{-8} + 4^2e^{8}}{e^{8} + 12e^{0} +2e^{-8} +e^{8}} = 15.97322
+\end{equation}
+
+and $\langle c \rangle^2 = 15.95715$\\
+This gives us for $T = 1$
+
+\begin{equation}
+ \chi = (\langle E^2 \rangle - \langle E \rangle^2) = 15.97322 - 15.95715 = 0.01607
+\end{equation}
+This gives us $\chi = 0.00402$ per spin.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c c c c|}                                                                                 \hline
+  $E_i$     & $\mathcal{M}_i$ & $|\mathcal{M}_i|$ & Degeneracy               &                         &                         &                         &\\ \hline  
+  -8        &        $4$      &      $4$          &       $1$         & $\uparrow \uparrow$      &                         &                         &                         \\
+            &                 &                   &                   & $\uparrow \uparrow$      &                         &                         &                         \\ \hline 
+   0        & $-2$            &      $2$          &       $4$         & $\uparrow \downarrow$    & $\downarrow \uparrow$   & $\downarrow \downarrow$ & $\downarrow \downarrow$ \\
+            &                 &                   &                   & $\downarrow \downarrow$ & $\downarrow \downarrow$ & $\uparrow \downarrow$   & $\downarrow \uparrow$   \\ \hline 
+   0        & $2$             &      $2$          &       $4$         & $\downarrow \uparrow$   & $\uparrow \downarrow$   & $\uparrow \uparrow$     & $\uparrow \uparrow$     \\
+            &                 &                   &                   & $\uparrow \uparrow$     & $\uparrow \uparrow$     & $\downarrow \uparrow$   & $\uparrow \downarrow$   \\ \hline 
+   0        & $0$             &      $0$          &       $4$         & $\uparrow \uparrow$     & $\downarrow \downarrow$ & $\uparrow \downarrow$   & $\downarrow \uparrow$   \\
+            &                 &                   &                   & $\downarrow \downarrow$ & $\uparrow \uparrow$     & $\uparrow \downarrow$   & $\downarrow \uparrow$   \\ \hline 
+   8        & $0$             &      $0$          &       $2$         & $\uparrow \downarrow$   & $\downarrow \uparrow$   &                         &                         \\
+            &                 &                   &                   & $\downarrow \uparrow$   & $\uparrow \downarrow$   &                         &                         \\ \hline 
+  -8        & $-4$            &      $4$          &       $1$         & $\downarrow \downarrow$ &                         &                         &                         \\
+            &                 &                   &                   & $\downarrow \downarrow$ &                         &                         &                         \\ \hline 
+\end{tabular}
+\caption{The table shows energy, E, magnetization, $\mathcal{M}$, absolute value of the magnetization, $|\mathcal{M}|$, and degeneracy for different spin configurations for a $2\times2$ system with periodic boundary conditions.}
+\label{ex_b_r_5}
+\end{center}
+\end{table}
+\newpage

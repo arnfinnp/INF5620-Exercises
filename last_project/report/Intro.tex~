@@ -1,0 +1,160 @@
+\section*{Project 2, Schr\"odinger's equation for two electrons in a three-dimensional harmonic oscillator well, deadline   October   8 (till the end of the day)}
+
+The aim of this project is to solve Schr\"odinger's equation for two electrons in a three-dimensional harmonic oscillator well with and without a 
+repulsive Coulomb interaction.
+In the first part of the project we are going to solve the radial part of the Schr\"odinger equation
+
+\[
+  -\frac{\hbar^2}{2 m} \left ( \frac{1}{r^2} \frac{d}{dr} r^2
+  \frac{d}{dr} - \frac{l (l + 1)}{r^2} \right )R(r) 
+     + V(r) R(r) = E R(r).
+\]
+
+In our case $V(r)$ is the harmonic oscillator potential $(1/2)kr^2$ with
+$k=m\omega^2$ and $E$ is
+the energy of the harmonic oscillator in three dimensions.
+The oscillator frequency is $\omega$ and the energies are
+
+\[
+E_{nl}=  \hbar \omega \left(2n+l+\frac{3}{2}\right),
+\]
+with $n=0,1,2,\dots$ and $l=0,1,2,\dots$.
+ 
+Since we have made a transformation to spherical coordinates it means that 
+$r\in [0,\infty)$.  
+The quantum number
+$l$ is the orbital momentum of the electron.  
+%
+Then we substitute $R(r) = (1/r) u(r)$ and obtain
+%
+\[
+  -\frac{\hbar^2}{2 m} \frac{d^2}{dr^2} u(r) 
+       + \left ( V(r) + \frac{l (l + 1)}{r^2}\frac{\hbar^2}{2 m}
+                                    \right ) u(r)  = E u(r) .
+\]
+%
+The boundary conditions are $u(0)=0$ and $u(\infty)=0$.
+
+We introduce a dimensionless variable $\rho = (1/\alpha) r$
+where $\alpha$ is a constant with dimension length and get
+% 
+\[
+  -\frac{\hbar^2}{2 m \alpha^2} \frac{d^2}{d\rho^2} u(\rho) 
+       + \left ( V(\rho) + \frac{l (l + 1)}{\rho^2}
+         \frac{\hbar^2}{2 m\alpha^2} \right ) u(\rho)  = E u(\rho) .
+\]
+%
+We will set in this project $l=0$.
+Inserting $V(\rho) = (1/2) k \alpha^2\rho^2$ we end up with
+\[
+  -\frac{\hbar^2}{2 m \alpha^2} \frac{d^2}{d\rho^2} u(\rho) 
+       + \frac{k}{2} \alpha^2\rho^2u(\rho)  = E u(\rho) .
+\]
+We multiply thereafter with $2m\alpha^2/\hbar^2$ on both sides and obtain
+\[
+  -\frac{d^2}{d\rho^2} u(\rho) 
+       + \frac{mk}{\hbar^2} \alpha^4\rho^2u(\rho)  = \frac{2m\alpha^2}{\hbar^2}E u(\rho) .
+\]
+The constant $\alpha$ can now be fixed
+so that
+\[
+\frac{mk}{\hbar^2} \alpha^4 = 1,
+\]
+or 
+\[
+\alpha = \left(\frac{\hbar^2}{mk}\right)^{1/4}.
+\]
+Defining 
+\[
+\lambda = \frac{2m\alpha^2}{\hbar^2}E,
+\]
+we can rewrite Schr\"odinger's equation as
+\[
+  -\frac{d^2}{d\rho^2} u(\rho) + \rho^2u(\rho)  = \lambda u(\rho) .
+\]
+This is the first equation to solve numerically. In three dimensions 
+the eigenvalues for $l=0$ are 
+$\lambda_0=3,\lambda_1=7,\lambda_2=11,\dots .$
+
+We use the by now standard
+expression for the second derivative of a function $u$
+\begin{equation}
+    u''=\frac{u(\rho+h) -2u(\rho) +u(\rho-h)}{h^2} +O(h^2),
+    \label{eq:diffoperation}
+\end{equation} 
+where $h$ is our step.
+Next we define minimum and maximum values for the variable $\rho$,
+$\rho_{\mathrm{min}}=0$  and $\rho_{\mathrm{max}}$, respectively.
+You need to check your results for the energies against different values
+$\rho_{\mathrm{max}}$, since we cannot set
+$\rho_{\mathrm{max}}=\infty$. 
+
+With a given number of steps, $n_{\mathrm{step}}$, we then 
+define the step $h$ as
+\[
+  h=\frac{\rho_{\mathrm{max}}-\rho_{\mathrm{min}} }{n_{\mathrm{step}}}.
+\]
+Define an arbitrary value of $\rho$ as 
+\[
+    \rho_i= \rho_{\mathrm{min}} + ih \hspace{1cm} i=0,1,2,\dots , n_{\mathrm{step}}
+\]
+we can rewrite the Schr\"odinger equation for $\rho_i$ as
+\[
+-\frac{u(\rho_i+h) -2u(\rho_i) +u(\rho_i-h)}{h^2}+\rho_i^2u(\rho_i)  = \lambda u(\rho_i),
+\]
+or in  a more compact way
+\[
+-\frac{u_{i+1} -2u_i +u_{i-1}}{h^2}+\rho_i^2u_i=-\frac{u_{i+1} -2u_i +u_{i-1} }{h^2}+V_iu_i  = \lambda u_i,
+\]
+where $V_i=\rho_i^2$ is the harmonic oscillator potential.
+Define first the diagonal matrix element
+\[
+   d_i=\frac{2}{h^2}+V_i,
+\]
+and the non-diagonal matrix element 
+\[
+   e_i=-\frac{1}{h^2}.
+\]
+In this case the non-diagonal matrix elements are given by a mere constant.
+{\em All non-diagonal matrix elements are equal}.
+With these definitions the Schr\"odinger equation takes the following form
+\[
+d_iu_i+e_{i-1}u_{i-1}+e_{i+1}u_{i+1}  = \lambda u_i,
+\]
+where $u_i$ is unknown. We can write the 
+latter equation as a matrix eigenvalue problem 
+\begin{equation}
+    \left( \begin{array}{ccccccc} d_1 & e_1 & 0   & 0    & \dots  &0     & 0 \\
+                                e_1 & d_2 & e_2 & 0    & \dots  &0     &0 \\
+                                0   & e_2 & d_3 & e_3  &0       &\dots & 0\\
+                                \dots  & \dots & \dots & \dots  &\dots      &\dots & \dots\\
+                                0   & \dots & \dots & \dots  &\dots       &d_{n_{\mathrm{step}}-2} & e_{n_{\mathrm{step}}-1}\\
+                                0   & \dots & \dots & \dots  &\dots       &e_{n_{\mathrm{step}}-1} & d_{n_{\mathrm{step}}}
+
+             \end{array} \right)      \left( \begin{array}{c} u_{1} \\
+                                                              u_{2} \\
+                                                              \dots\\ \dots\\ \dots\\
+                                                              u_{n_{\mathrm{step}}-1}
+             \end{array} \right)=\lambda \left( \begin{array}{c} u_{1} \\
+                                                              u_{2} \\
+                                                              \dots\\ \dots\\ \dots\\
+                                                              u_{n_{\mathrm{step}}-1}
+             \end{array} \right) 
+      \label{eq:sematrix}
+\end{equation} 
+or if we wish to be more detailed, we can write the tridiagonal matrix as
+\begin{equation}
+    \left( \begin{array}{ccccccc} \frac{2}{h^2}+V_1 & -\frac{1}{h^2} & 0   & 0    & \dots  &0     & 0 \\
+                                -\frac{1}{h^2} & \frac{2}{h^2}+V_2 & -\frac{1}{h^2} & 0    & \dots  &0     &0 \\
+                                0   & -\frac{1}{h^2} & \frac{2}{h^2}+V_3 & -\frac{1}{h^2}  &0       &\dots & 0\\
+                                \dots  & \dots & \dots & \dots  &\dots      &\dots & \dots\\
+                                0   & \dots & \dots & \dots  &\dots       &\frac{2}{h^2}+V_{n_{\mathrm{step}}-2} & -\frac{1}{h^2}\\
+                                0   & \dots & \dots & \dots  &\dots       &-\frac{1}{h^2} & \frac{2}{h^2}+V_{n_{\mathrm{step}}-1}
+
+             \end{array} \right)  
+\label{eq:matrixse} 
+\end{equation} 
+
+Recall that the solutions are known via the boundary conditions at
+$i=n_{\mathrm{step}}$ and at the other end point, that is for  $\rho_0$.
+The solution is zero in both cases.

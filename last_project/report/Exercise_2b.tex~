@@ -1,0 +1,494 @@
+\section{Exercise 2b}
+\begin{itemize}
+ \item How many points $n_{\text{step}}$ do you need in order to get the lowest three eigenvalues with four leading digits?
+ 
+ \item How many similarity transformations are needed before you reach a result where all non-diagonal elements are essentially zero.
+ 
+ \item Try to estimate the number of transformations and extract a behavior as function of the dimensionality of the matrix.
+ 
+ \subitem Check your results against the code based on Householder's algorithm.
+ 
+ \item Comment your results (time needed for both algorithms for a given dimensionality of the matrix)
+\end{itemize}
+
+\subsection{Results} 
+\subsubsection{Estimate $\rho_{\text{max}}$} 
+Before we can estimate how many $n_{\text{step}}$ we need in order to get the lowest three eigenvalues with four leading digits, 
+we have to find the optimal $\rho_{\text{max}}$
+This is the way I estimated $\rho_{\text{max}}$
+\begin{itemize}
+\item The first thing I did was to choose a $n$ value. I started with a low value, $n = 50$.
+\item Then I variated my $\rho_{\text{max}}$ between $\rho_{\text{max}} = 3.5$ and $\rho_{\text{max}} = 6.5$.
+\item When I had done this for $n = 50$, I changed $n$ to $n = 100$ and variated $\rho_{\text{max}}$ just like I did for $n = 50$.
+\item I did the same thing for $n = 200$, $n = 300$, $n = 400$.
+\end{itemize}
+
+The results from this tests can be seen in table [\ref{rho_max_n_50}], [\ref{rho_max_n_100}], [\ref{rho_max_n_200}], [\ref{rho_max_n_300}], [\ref{rho_max_n_400}]
+I chose $\rho_{\text{max}}$-value that didn't overestimate the eigenvalues. We can see from table [\ref{rho_max_n_50}] that the best $\rho_{\text{max}}$ 
+From the tables we can see that the best $\rho_{\text{max}}$-values are.
+\begin{itemize}
+\item For $n = 50$ is $\rho_{\text{max}} = 4.5$
+\item For $n = 100$ is $\rho_{\text{max}} = 4.5$
+\item For $n = 200$ is $\rho_{\text{max}} = 5.0$
+\item For $n = 300$ is $\rho_{\text{max}} = 5.0$
+\item For $n = 400$ is $\rho_{\text{max}} = 5.0$
+\end{itemize}
+
+We can see that $\rho_{\text{max}}$ has a some $n$-dependency. I don't know if this dependency continues for $n > 400$, but it is something one has 
+to think about when estimating eigenvalues for greater matrices.
+
+I could also have estimated $\rho_{\text{max}}$ by plotting the wave function,$u(\rho)$, and chose $\rho_{\text{max}}$ where $u(\rho)$ 
+was small compared to the rest of the plot.
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ |c|c|c|c| }
+  \hline
+  $\rho_{\text{max}}$ & $\lambda_0$ & $\lambda_1$ & $\lambda_2$ \\ \hline
+  $3.5$ & $2.99933$ & $7.03895$ & $11.4931$   \\ \hline
+  $4.0$ & $2.99811$ & $6.99374$ & $11.0540$   \\ \hline
+  $4.5$ & $2.99757$ & $6.98794$ & $10.9759$   \\ \hline
+  $5.0$ & $2.99699$ & $6.98495$ & $10.9634$   \\ \hline
+  $5.5$ & $2.99636$ & $6.98178$ & $10.9555$   \\ \hline
+  $6.0$ & $2.99567$ & $6.97831$ & $10.9470$   \\ \hline
+  $6.5$ & $2.99491$ & $6.97452$ & $10.9377$   \\ \hline
+\end{tabular}
+\caption{Different $\rho_{\text{max}}$. With $\epsilon = 10^{-12}$ and $n = 50$}
+\label{rho_max_n_50}
+\end{center}
+\end{table}
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ |c|c|c|c| }
+  \hline
+  $\rho$ & $\lambda_0$ & $\lambda_1$ & $\lambda_2$ \\ \hline
+  $3.5$ & $3.00042$ & $7.04465$ & $11.5112$   \\ \hline
+  $4.0$ & $2.99954$ & $7.00093$ & $11.0725$   \\ \hline
+  $4.5$ & $2.99938$ & $6.99702$ & $10.9981$   \\ \hline
+  $5.0$ & $2.99923$ & $6.99617$ & $10.9908$   \\ \hline
+  $5.5$ & $2.99907$ & $6.99536$ & $10.9887$   \\ \hline
+  $6.0$ & $2.99890$ & $6.99448$ & $10.9865$   \\ \hline
+  $6.5$ & $2.99871$ & $6.99352$ & $10.9842$   \\ \hline
+\end{tabular}
+\caption{Different $\rho_{\text{max}}$. With $\epsilon = 10^{-12}$ and $n = 100$}
+\label{rho_max_n_100}
+\end{center}
+\end{table}    
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ |c|c|c|c| }
+  \hline
+  $\rho$ & $\lambda_0$ & $\lambda_1$ & $\lambda_2$ \\ \hline
+  $3.5$ & $3.00070$ & $7.04611$ & $11.5158$   \\ \hline
+  $4.0$ & $2.99991$ & $7.00276$ & $11.0772$   \\ \hline
+  $4.5$ & $2.99984$ & $6.99934$ & $11.0038$   \\ \hline
+  $5.0$ & $2.99981$ & $6.99904$ & $10.9978$   \\ \hline
+  $5.5$ & $2.99977$ & $6.99883$ & $10.9971$   \\ \hline
+  $6.0$ & $2.99972$ & $6.99861$ & $10.9966$   \\ \hline
+  $6.5$ & $2.99967$ & $6.99837$ & $10.9960$   \\ \hline
+\end{tabular}
+\caption{Different $\rho_{\text{max}}$. With $\epsilon = 10^{-12}$ and $n = 200$}
+\label{rho_max_n_200}
+\end{center}
+\end{table}   
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ |c|c|c|c| }
+  \hline
+  $\rho$ & $\lambda_0$ & $\lambda_1$ & $\lambda_2$ \\ \hline
+  $3.5$ & $3.00076$ & $7.04639$ & $11.5167$   \\ \hline
+  $4.0$ & $2.99997$ & $7.00311$ & $11.0781$   \\ \hline
+  $4.5$ & $2.99993$ & $6.99978$ & $11.0049$   \\ \hline
+  $5.0$ & $2.99991$ & $6.99957$ & $10.9991$   \\ \hline
+  $5.5$ & $2.99990$ & $6.99948$ & $10.9987$   \\ \hline
+  $6.0$ & $2.99988$ & $6.99938$ & $10.9985$   \\ \hline
+  $6.5$ & $2.99985$ & $6.99927$ & $10.9982$   \\ \hline
+\end{tabular}
+\caption{Different $\rho_{\text{max}}$. With $\epsilon = 10^{-12}$ and $n = 300$}
+\label{rho_max_n_300}
+\end{center}
+\end{table}  
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ |c|c|c|c| }
+  \hline
+  $\rho$ & $\lambda_0$ & $\lambda_1$ & $\lambda_2$ \\ \hline
+  $3.5$ & $3.00078$ & $7.04648$ & $11.5170$   \\ \hline
+  $4.0$ & $3.00000$ & $7.00323$ & $11.0784$   \\ \hline
+  $4.5$ & $2.99996$ & $6.99993$ & $11.0053$   \\ \hline
+  $5.0$ & $2.99995$ & $6.99976$ & $10.9996$   \\ \hline
+  $5.5$ & $2.99994$ & $6.99971$ & $10.9993$   \\ \hline
+  $6.0$ & $2.99993$ & $6.99965$ & $10.9991$   \\ \hline
+  $6.5$ & $2.99992$ & $6.99959$ & $10.9990$   \\ \hline
+\end{tabular}
+\caption{Different $\rho_{\text{max}}$. With $\epsilon = 10^{-12}$ and $n = 400$}
+\label{rho_max_n_400}
+\end{center}
+\end{table}  
+\subsubsection{Estimate $n_{\text{step}}$} 
+Now that I have found a good $\rho_{\text{max}}$-value, I can find how many $n_{\text{step}}$ we need in order to get the 
+lowest three eigenvalues, $\lambda_0$, $\lambda_1$ and $\lambda_2$, with four leading digits. The results for this is shown in table [\ref{lowest_n_step}].
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ |c|c|c|c| }
+  \hline
+  $n$   & $\lambda_0$ & $\lambda_1$ & $\lambda_2$ \\ \hline
+  $50$  & $2.99699$   & $6.98495$   & $10.96342$  \\ \hline
+  $100$ & $2.99923$   & $6.99617$   & $10.99084$  \\ \hline
+  $150$ & $2.99965$   & $6.99828$   & $10.99601$  \\ \hline
+  $200$ & $2.99980$   & $6.99903$   & $10.99783$  \\ \hline
+  $250$ & $2.99987$   & $6.99938$   & $10.99868$  \\ \hline
+  $300$ & $2.99991$   & $6.99957$   & $10.99914$  \\ \hline
+  $350$ & $2.99993$   & $6.99968$   & $10.99942$  \\ \hline
+  $400$ & $2.99995$   & $6.99975$   & $10.99960$  \\ \hline
+  $450$ & $2.99996$   & $6.99981$   & $10.99972$  \\ \hline
+  $500$ & $2.99996$   & $6.99984$   & $10.99981$  \\ \hline
+  $550$ & $2.99997$   & $6.99987$   & $10.99988$  \\ \hline
+  $600$ & $2.99997$   & $6.99989$   & $10.99993$  \\ \hline
+  $650$ & $2.99998$   & $6.99991$   & $10.99997$  \\ \hline
+\end{tabular}
+\caption{Time used on the Jacobi method. With $\epsilon = 10^{-8}$ and $\rho_{\text{max}} = 5$}
+\label{lowest_n_step}
+\end{center}
+\end{table}
+
+From table [\ref{lowest_n_step}] we can see that we need $n = 300$ to estimate $\lambda_0$ with four leading digits.
+We need $n = 650$ to estimate $\lambda_1$ with four leading digits. And we need $n = 600$ to estimate $\lambda_2$ with four leading digits.
+So to estimate all three eigenvalues with four leading digits, we need $n = 600$ when we have $\rho_{\text{max}} = 5$ and $\epsilon = 10^{-8}$ \\
+
+\subsubsection{Estimate the number of similarity transformations} 
+
+Before we can start estimating the number of similarity transformations that is needed for our non-diagonal matrix elements to essentially be zero,
+we have to find out what "essentially be zero" is. In Jacobi's algorithm we have a value called $\epsilon$, this is the value we compare the values of 
+our non-diagonal matrix elements with. But how do we know what the correct $\epsilon$-value is? 
+To find the best value for $\epsilon$, I ran some tests, with the same $n$-value. The results are shown in table [\ref{estimate epsilon}]
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ |c|c|c|c| }
+  \hline
+  $\epsilon$   & $\lambda_0$ & $\lambda_1$ & $\lambda_2$ \\ \hline
+  $10^{-9}$    & $2.99995$   & $6.99975$   & $10.99960$  \\ \hline
+  $10^{-8}$    & $2.99995$   & $6.99975$   & $10.99960$  \\ \hline
+  $10^{-7}$    & $2.99995$   & $6.99975$   & $10.99960$  \\ \hline
+  $10^{-6}$    & $2.99995$   & $6.99975$   & $10.99960$  \\ \hline
+  $10^{-5}$    & $2.99995$   & $6.99975$   & $10.99960$  \\ \hline
+  $10^{-4}$    & $2.99995$   & $6.99975$   & $10.99960$  \\ \hline
+  $10^{-3}$    & $2.99995$   & $6.99975$   & $10.99960$  \\ \hline
+  $10^{-2}$    & $2.99996$   & $6.99976$   & $10.99960$  \\ \hline
+  $10^{-1}$    & $3.00191$   & $6.99962$   & $10.99958$  \\ \hline
+  $10^{0}$     & $3.10164$   & $7.09934$   & $11.32713$  \\ \hline
+\end{tabular}
+\caption{Time used on the Jacobi method. $n = 10^{-8}$. $\rho_{\text{max}} = 5$}
+\label{estimate epsilon}
+\end{center}
+\end{table}
+
+From table [\ref{estimate epsilon}] we see that we get really good result even with $\epsilon$-values as low as $\epsilon = 10^{-3}$. 
+If we only want the first four leading digits, we can choose $\epsilon = 10^{-2}$. In my Jacobi algorithm, I compared $\epsilon$ to the largest off-diagonal value
+and not the sum over all off-diagonal values. If I had chosen to sum over all off-diagonal values, then the results for $\epsilon > 10^{-3}$ would 
+probably be a little bit better.
+
+Just to be on the safe side, I chose $\epsilon = 10^{-8}$ when I estimated the number of similarity transformations I needed. The results are shown in
+table [\ref{similarity_trans}]
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ |c|c| }
+  \hline
+  $n$ & number of rotations \\ \hline
+  $50$ & $4040$ \\ \hline
+  $100$ & $16475$  \\ \hline
+  $150$ & $37444$  \\ \hline
+  $200$ & $66828$  \\ \hline
+  $250$ & $104291$  \\ \hline
+  $300$ & $150798$  \\ \hline
+  $350$ & $205757$  \\ \hline
+  $400$ & $269021$  \\ \hline
+  $450$ & $340721$  \\ \hline
+  $500$ & $422322$  \\ \hline
+  $550$ & $511191$  \\ \hline
+  $600$ & $610531$  \\ \hline
+  $650$ & $714530$  \\ \hline
+\end{tabular}
+\caption{The number of rotations used by the Jacobi method for the largest off-diagonal value to reach $\epsilon = 10^{-8}$. $\rho_{\text{max}} = 5$}
+\label{similarity_trans}
+\end{center}
+\end{table}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.65]{data_2a/variating_n/dimensionality.png}
+\end{center}
+\caption{The number of rotations plotted against n. The red one is the actual results from Jacobis method. The blue is an estimated line}
+\label{plot_similarity_trans}
+\end{figure}
+
+As we can see from plot [\ref{plot_similarity_trans}], the number of transformations goes as $An^2$ and it looks like $A \approx 1.67$.
+
+\subsubsection{Householder algorithm}
+
+An easy way to perform the Householder algorithm, is to use tred2() and tqli() from the lib.cpp file. In this project I'm using armadillo, so I had to hack
+tred2() and tqli() before I could use them with armadillo. The code is at the end of the project.
+
+We see from fig.(\ref{plot_time_householder}) and fig.(\ref{plot_time_jacobi}) that Householder's method uses approximately the same time on 
+a $3000 \times 3000$-matrix that Jacobi does on a $600 \times 600$-matrix.
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.65]{data_2b/variating_n/time_used_housholder.png}
+\end{center}
+\caption{Time that the Householder algorithm uses to calculate a $n \times n$-matrix}
+\label{plot_time_householder}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.65]{data_2b/variating_n/time_used_jacobi.png}
+\end{center}
+\caption{Time that the Jacobi algorithm uses to calculate a $n \times n$-matrix}
+\label{plot_time_jacobi}
+\end{figure}
+
+\subsubsection{Code-Householder}
+\begin{lstlisting}
+#include <cstdlib>
+#include <iostream>
+#include <armadillo>
+#include <math.h>
+#include <stdio.h>
+#include <ctime>
+#include <iomanip>
+#include <fstream>
+
+using namespace std;
+using namespace arma;
+
+static float sqrarg;
+#define SQR(a) ((sqrarg = (a)) == 0.0 ? 0.0 : sqrarg * sqrarg)
+#define   SIGN(a,b) ((b)<0 ? -fabs(a) : fabs(a))
+
+void Tridiag(mat &, int, double, double);
+double pythag(double, double);
+void initialise(int &, double &, double &);
+void tqli(vec &, vec &, int, mat &);
+void tred2(mat &, int, vec &, vec &);
+
+int main(int argc, char** argv) {
+    clock_t start, finish;
+    double rho_max, rho_min;
+    int n;
+
+    initialise(n, rho_max, rho_min);
+
+    mat A(n, n);
+    Tridiag(A, n, rho_min, rho_max);
+
+    vec e(n);
+
+    e = A.diag(1);
+    vec d = A.diag();
+
+    e.resize(n);
+    e(n-1) = 0;
+
+    start = clock();
+    tred2(A, n, d, e);
+    tqli(d, e, n, A);
+    finish = clock();
+    cout << "Time used: " << 1000 * ((finish - start) / CLOCKS_PER_SEC) << " ms." << endl;
+
+    vec b = sort(d);
+
+    cout << "eigen value 1 = " << setw(13) << setprecision(8) << b(0) << endl;
+    cout << "eigen value 2 = " << setw(13) << setprecision(8) << b(1) << endl;
+    cout << "eigen value 3 = " << setw(13) << setprecision(8) << b(2) << endl;
+    return 0;
+}
+
+void initialise(int& n, double& rho_max, double& rho_min) {
+    cout << endl;
+    cout << "insert n" << endl;
+    cin >> n;
+    cout << "insert rho_max" << endl;
+    cin >> rho_max;
+
+    //n = 1000;
+    //rho_max = 5.0;
+    rho_min = 0;
+
+    cout << "n = " << n << endl;
+    cout << "rho_max = " << rho_max << endl;
+    return;
+}
+
+void Tridiag(mat &A, int n, double rho_min, double rho_max) {
+    double h, e, d;
+
+    h = (rho_max - rho_min) / (n + 1);
+
+    d = 2.0 / (h * h);
+    e = -1.0 / (h * h);
+    vec V = linspace<vec > (rho_min + h, rho_max - h, n);
+
+    A.zeros();
+
+    for (int i = 0; i < n; i++) {
+        A(i, i) = d + V(i) * V(i);
+        if (i > 0) {
+            A(i, i - 1) = e;
+            A(i - 1, i) = e;
+        }
+    }
+    return;
+}
+
+void tqli(vec &d, vec &e, int n, mat &A) {
+    register int m, l, iter, i, k;
+    double s, r, p, g, f, dd, c, b;
+
+    for (i = 1; i < n; i++) e(i - 1) = e(i);
+    e(n-1) = 0.0;
+    for (l = 0; l < n; l++) {
+        iter = 0;
+        do {
+            for (m = l; m < n - 1; m++) {
+                dd = fabs(d[m]) + fabs(d[m + 1]);
+                if ((double) (fabs(e(m)) + dd) == dd) break;
+            }
+            if (m != l) {
+                if (iter++ == 30) {
+                    printf("\n\nToo many iterations in tqli.\n");
+                    exit(1);
+                }
+                g = (d(l + 1) - d(l)) / (2.0 * e(l));
+                r = pythag(g, 1.0);
+                g = d(m) - d(l) + e(l) / (g + SIGN(r, g));
+                s = c = 1.0;
+                p = 0.0;
+                for (i = m - 1; i >= l; i--) {
+                    f = s * e(i);
+                    b = c * e(i);
+                    e(i + 1) = (r = pythag(f, g));
+                    if (r == 0.0) {
+                        d(i + 1) -= p;
+                        e[m] = 0.0;
+                        break;
+                    }
+                    s = f / r;
+                    c = g / r;
+                    g = d(i + 1) - p;
+                    r = (d(i) - g) * s + 2.0 * c * b;
+                    d(i + 1) = g + (p = s * r);
+                    g = c * r - b;
+                    for (k = 0; k < n; k++) {
+                        f = A(k, i + 1);
+                        A(k, i + 1) = s * A(k, i) + c * f;
+                        A(k, i) = c * A(k, i) - s * f;
+                    } /* end k-loop */
+                } /* end i-loop */
+                if (r == 0.0 && i >= l) continue;
+                d(l) -= p;
+                e(l) = g;
+                e(m) = 0.0;
+            } /* end if-loop for m != 1 */
+        } while (m != l);
+    } /* end l-loop */
+} /* End: function tqli(), (C) Copr. 1986-92 Numerical Recipes Software )%. */
+
+void tred2(mat &A, int n, vec &d, vec &e) {
+    register int l, k, j, i;
+    double scale, hh, h, g, f;
+    for (i = n - 1; i > 0; i--) {
+        l = i - 1;
+        h = scale = 0.0;
+        if (l > 0) {
+            for (k = 0; k <= l; k++) {
+                scale += fabs(A(i, k));
+            }
+            if (scale == 0.0) { // skip transformation
+                e(i) = A(i, l);
+            } 
+            else {
+                for (k = 0; k <= l; k++) {
+                    A(i, k) /= scale; // used scaled a's for transformation
+                    h += A(i, k) * A(i, k);
+                }
+                f = A(i, l);
+                g = (f >= 0.0 ? -sqrt(h) : sqrt(h));
+                e(i) = scale*g;
+                h -= f * g;
+                A(i, l) = f - g;
+                f = 0.0;
+
+                for (j = 0; j <= l; j++) {
+                    A(j, i) = A(i, j) / h; // can be omitted if eigenvector not wanted
+                    g = 0.0;
+                    for (k = 0; k <= j; k++) {
+                        g += A(j, k) * A(i, k);
+                    }
+                    for (k = j + 1; k <= l; k++) {
+                        g += A(k, j) * A(i, k);
+                    }
+                    e(j) = g / h;
+                    f += e(j) * A(i, j);
+                }
+                hh = f / (h + h);
+                for (j = 0; j <= l; j++) {
+                    f = A(i, j);
+                    e(j) = g = e(j) - hh*f;
+                    for (k = 0; k <= j; k++) {
+                        A(j, k) -= (f * e(k) + g * A(i, k));
+                    }
+                }
+            }
+        }// end if-loop for l > 1
+        else {
+            e(i) = A(i, l);
+        }
+        d(i) = h;
+    } // end i-loop
+    d(0) = 0.0;
+    e(0) = 0.0;
+
+    /* Contents of this loop can be omitted if eigenvectors not
+     ** wanted except for statement d[i]=a[i][i];
+     */
+
+    for (i = 0; i < n; i++) {
+        l = i - 1;
+        if (d(i)) {
+            for (j = 0; j <= l; j++) {
+                g = 0.0;
+                for (k = 0; k <= l; k++) {
+                    g += A(i, k) * A(k, j);
+                }
+                for (k = 0; k <= l; k++) {
+                    A(k, j) -= g * A(k, i);
+                }
+            }
+        }
+        d(i) = A(i, i);
+        A(i, i) = 1.0;
+        for (j = 0; j <= l; j++) {
+            A(j, i) = A(i, j) = 0.0;
+        }
+    }
+} // End: function tred2(), (C) Copr. 1986-92 Numerical Recipes Software )
+
+double pythag(double a, double b) {
+    double absa, absb;
+    absa = fabs(a);
+    absb = fabs(b);
+    if (absa > absb) {
+        return absa * sqrt(1.0 + SQR(absb / absa));
+    } else {
+        return (absb == 0.0 ? 0.0 : absb * sqrt(1.0 + SQR(absa / absb)));
+    }
+}
+// End: function pythag(), (C) Copr. 1986-92 Numerical Recipes Software )%.
+\end{lstlisting}

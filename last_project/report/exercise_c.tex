@@ -1,0 +1,20 @@
+\section{exercise c}
+
+If we just drop the while-loop from b, we get a Picard iteration scheme with one iteration. 
+\begin{lstlisting}
+  u = Function(V)
+  solve(a == L, u, bcs)
+  u_k.assign(u)
+\end{lstlisting}
+
+So we just assign $u_k$ to be $u$. This will probably yield a high error.
+The way we can solve the problem easy for both 1D, 2D and 3D without much problem is to 
+implement this bit code
+
+\begin{lstlisting}
+degree = int(sys.argv[1])
+divisions = [int(arg) for arg in sys.argv[2:]]
+d = len(divisions)
+domain_type = [UnitInterval, UnitSquare, UnitCube]
+mesh = domain_type[d-1](*divisions)
+\end{lstlisting}

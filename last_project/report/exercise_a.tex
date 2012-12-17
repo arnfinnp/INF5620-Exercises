@@ -1,0 +1,64 @@
+\section{exercise a}
+We have been given the non-linear PDE
+
+\begin{equation}
+ \rho u_t = \nabla \cdotp (\alpha(u) \nabla u) + f(\vec{x},t),
+\end{equation}
+
+with initial condition $u(\vec{x},0) = I(\vec{x})$ and boundary condition, Neumann conditions, $\partial u/\partial n = 0$. $\rho$ is a constant and $\alpha(u)$ is a known function of $u$.
+
+We'll first derive a variational formulation of the initial system, and we'll use Backward Euler scheme in time, on the $u_t$ part.
+
+\begin{equation*}
+ u_t = \frac{u^{n} - u^{n-1}}{\Delta t}
+\end{equation*}
+
+this is the Backward Euler scheme. By inserting this into eq.(1), we get
+
+\begin{equation*}
+ \rho \frac{u^{n} - u^{n-1}}{\Delta t} = \nabla \cdotp (\alpha(u^{n}) \nabla u^{n}) + f(\vec{x},t_{n})
+\end{equation*}
+
+To get the variational form, we have to take the integral on both sides of the equation over some region, $\Omega$, and multiply each sides by $v$.
+
+\begin{equation}
+ \int_{\Omega} \rho u^{n}v - \Delta t \nabla \cdotp (\alpha(u^{n}) \nabla u^{n})v d\vec{x} = \int_{\Omega} \rho u^{n-1}v  + \Delta t f(\vec{x},t_{n})v d\vec{x}
+\end{equation}
+
+If we now use integration by parts on $-\Delta t \nabla \cdotp (\alpha(u^{n}) \nabla u^{n})v$, and use our boundary condition $\partial u/\partial n = 0$, we get
+
+\begin{equation*}
+ -\Delta t \int_{\Omega} \underbrace{\nabla \cdotp (\alpha(u^{n}) \nabla u^{n})}_{u'}v d\vec{x} = \underbrace{\int_{d\Omega}\frac{\partial u}{\partial n} v ds}_{=0} + \Delta t \int_{\Omega} \alpha(u^{n}) \nabla u^{n} \cdotp \nabla v d\vec{x}
+\end{equation*}
+
+If we insert this into eq.(2), we get
+
+\begin{equation*}
+ \int_{\Omega} \rho u^{n}v + \Delta t \alpha(u^{n}) \nabla u^{n} \cdotp \nabla v d\vec{x} = \int_{\Omega} \rho u^{n-1}v  + \Delta t f(\vec{x},t_{n})v d\vec{x}
+\end{equation*}
+
+we now rename $u^{n} \rightarrow u$, $u^{n-1} \rightarrow u_1$ and $f(\vec{x},t_{n}) \rightarrow f^n$ and use inner product notation
+
+\begin{equation*}
+ \rho(u,v) + \Delta t (\alpha(u) \nabla u,\nabla v) = \rho(u_1,v)  + \Delta t(f^n,v)
+\end{equation*}
+
+We see that our left side depends on the unknowns $u$ and $v$, and our left side depends only on the unknown $v$. We can now rewrite our function to two functions $a(u,v)$ and $L(v)$
+
+\begin{equation}
+ a(u,v) = (\rho(u,v) + \Delta t (\alpha(u) \nabla u,\nabla v))dx
+\end{equation}
+
+and 
+
+\begin{equation}
+ L(v) = (\rho(u_1,v)  + \Delta t(f^n,v))dx
+\end{equation}
+
+For the first time step we have to use our initial condition $u(\vec{x},0) = I(\vec{x})$, if we insert this into eq.(4), we get
+
+\begin{equation}
+ L_0(v) = (\rho(I(\vec{x}),v)  + \Delta t(f^n,v))dx
+\end{equation}
+
+$a(u,v)$ is the same for all time steps.

@@ -1,0 +1,23 @@
+%\documentclass[a4paper,twocolumn, english,10pt]{article}
+\documentclass[a4paper, english,10pt]{article}
+
+\include{preamble}
+\include{customCommands}
+
+\begin{document}
+\title{INF5620}
+\author{Arnfinn Mihle Paulsrud}
+\maketitle
+\input{exercise_a}
+\input{exercise_b}
+\input{exercise_c}
+\input{exercise_d}
+\input{exercise_e}
+\input{exercise_f}
+%\input{exercise_g}
+\input{exercise_h}
+\input{exercise_i}
+%\input{exercise_j}
+%\input{exercise_k}
+%\input{FEM}
+\end{document}

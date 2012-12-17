@@ -1,0 +1,271 @@
+\section{Exercise 2a}
+In this exercise we are going to solve eq.[\ref{eq:sematrix}] with the Jacobi rotation algorithm.
+
+If we want to minimize the difference between the matrices ${\bf B}$ and ${\bf A}$, we should choose a $c$ close to $1$
+$\lim_{c\rightarrow1}(1-c) = 0$
+
+\[
+||{\bf B}-{\bf A}||_F^2=4(1-c)\sum_{i=1,i\ne k,l}^n(a_{ik}^2+a_{il}^2) +\frac{2a_{kl}^2}{c^2}.
+\]
+
+We know that when the angle $\theta = 0$ the $\cos(\theta) = 1$, $\sin(\theta) = 0$ and $\tan(\theta) = 0$. 
+
+
+\subsection{Jacobi's method} 
+
+Jacobi's method is quite simple, and this is how it works:
+\begin{itemize}
+
+\item Create a tridiagonal $n \times n$-matrix, $\vec{A}$, and a $n \times n$-matrix, $\vec{R}$. The eigenvectors are stored in the $\vec{R}$-matrix..
+
+\item Find the largest absolute value of the non-diagonal elements of $\vec{A}$, or the sum over all 
+ the squared non-diagonal matrix elements. I'll use the maximum number method because summing over all off-diagonal elements is quite time consuming 
+ and it will slow down the algorithm quite a bit.
+
+\item If the largest absolute value of the non-diagonal elements is greater than a prefixed value $\epsilon$, we have to do a similarity transformation.
+$\epsilon$ is approximately $10^{-8}$
+
+\item Now we need to find $\tan(\theta)$, $\cos(\theta)$, $\sin(\theta)$ and $\tau = \cot(2\theta)$
+
+\begin{equation}
+ \tau = \cot(2\theta) = \frac{a_{ll} - a_{kk}}{2a_{kl}}
+\end{equation}
+
+\begin{align}
+ &\tan^2(\theta) + 2 \tau \tan(\theta) - 1 = 0 \\
+ \Rightarrow &\tan(\theta) = - \tau \pm \sqrt{1 + \tau^2}
+\end{align}
+
+\begin{equation}
+ \cos(\theta) = \frac{1}{\sqrt{1 + \tan^2(\theta)}}
+\end{equation}
+
+\begin{equation}
+ \sin(\theta) = \tan(\theta) \cos(\theta)
+\end{equation}
+
+\item Now it is time to do the similarity transformation $\vec{B} = \vec{S}^T\vec{AS}$, where $\vec{S}$ is given as
+
+\begin{equation}
+     S = \left( \begin{array}{cccccccc} 
+	1     & 0     & \dots & 0             & 0     & \dots & 0     & 0            \\
+	0     & 1     & \dots & 0             & 0     & \dots & 0     & 0            \\
+	\dots & \dots & \dots & \dots         & \dots & \dots & \dots & \dots        \\
+	0     & 0     & \dots & \cos(\theta)  & 0     & \dots & 0     & \sin(\theta) \\
+	0     & 0     & \dots & 0             & 1     & \dots & 0     & 0            \\
+	\dots & \dots & \dots & \dots         & \dots & \dots & \dots & \dots        \\
+	0     & 0     & \dots & 0             & 0     & \dots & 1     & 0            \\
+	0     & 0     & \dots & -\sin(\theta) & 0     & \dots & 0     & \cos(\theta) \\
+    \end{array} \right)
+    \label{eq:jacobi}
+\end{equation} 
+
+with property $\vec{S}^T = \vec{S}^{-1}$. The matrix $\vec{S}$ performs a plane rotation around an angle $\theta$ in the Euclidean $n$-dimensional space.
+
+\[
+    s_{kk} = s_{ll} = \cos(\theta), s_{kl} = -s_{lk} = -\sin(\theta), s_{ii} = -s_{ii} = 1, i\neq k, i \neq l \\
+\]
+
+We then end up with these equations 
+
+\begin{align}
+    b_{ii} &= a_{ii},i \neq k, i \neq l \\
+    b_{ik} &= a_{ik}\cos(\theta) + a_{il}\sin(\theta), i \neq k, i \neq l \\
+    b_{il} &= a_{il}\cos(\theta) + a_{ik}\sin(\theta), i \neq k, i \neq l \\
+    b_{kk} &= a_{kk}\cos^2(\theta) - 2a_{kl}\cos(\theta)\sin(\theta) + a_{ll}\sin^2(\theta) \\
+    b_{ll} &= a_{ll}\cos^2(\theta) - 2a_{kl}\cos(\theta)\sin(\theta) + a_{kk}\sin^2(\theta) \\
+    b_{kl} &= (a_{kk} - a_{ll})\cos(\theta)\sin(\theta) + a_{kl}(\cos^2(\theta) - \sin^2(\theta))
+\end{align}
+
+These are the equations we'll use in our program. If we wanted, we could have done the actual matrix multiplication, but that is not a good idea
+because we'll do a lot of unnecessary operations which takes a lot of cpu-time.
+
+\item We now set $b_{kl} = b_{lk} = 0$ and solve $b_{kk}$, $b_{ll}$, $b_{ik}$ and $b_{il}$ by using (8) - (13).
+
+\item Update our eigenvalue matrix, $\vec{R}$, by using (9) and (10).
+
+\item Again we check the maximum-value against our prefixed value, $\epsilon$. 
+If the $\epsilon$ is smaller than our value, we'll have to use the similarity transformation again. If the value is smaller than $\epsilon$, 
+we are done with the similarity transformations. We now have a matrix $\vec{A}$ with eigenvalues, and matrix $\vec{R}$ with eigenvectors.
+\end{itemize}                                        
+
+\subsubsection{Code-Jacobi}
+
+\begin{lstlisting}
+#include <cstdlib>
+#include <iostream>
+#include <armadillo>
+#include <math.h>
+#include <stdio.h>
+#include <ctime>
+#include <iomanip>
+#include <fstream>
+
+using namespace std;
+using namespace arma;
+
+void Tridiag(mat &, int, double, double);
+void Jacobi(mat &, mat &, int, double);
+double maxoffdiag(mat &, int*, int*, int);
+void rotate(mat &, mat  &, int, int, int);
+void initialise(int &, double &, double &, double &);
+
+
+int main(int argc, char** argv) {
+    clock_t start, finish;
+    double epsilon;
+    char fileigvec[50];
+    char fileigval[50];
+    double rho_max, rho_min, h;
+    int n;
+    
+    initialise(n, rho_max, rho_min, epsilon);
+    
+    sprintf(fileigvec, "eigenvec_rep_n=%d_rho=%1.1f_epsilon=%1.2f.txt",n,rho_max,epsilon);
+    sprintf(fileigval, "eigenval_rep_n=%d_rho=%1.1f_epsilon=%1.2f.txt",n,rho_max,epsilon);
+    
+    mat A(n,n);
+    mat R; 
+    R.eye(n,n);
+        
+    Tridiag(A,n,rho_min,rho_max);  
+        
+    start = clock();
+    Jacobi(A, R, n, epsilon);
+    finish = clock();
+    
+    cout << "Time used: " << 1000*((finish - start)/CLOCKS_PER_SEC) << " ms." << endl;
+    
+    //A.print("A:");
+    vec a = A.diag();
+    vec b = sort(a);
+    cout << "eigen value 1 = " << setw(13) << setprecision(12) << b(0) << endl;
+    cout << "eigen value 2 = " << setw(13) << setprecision(12) << b(1) << endl;
+    cout << "eigen value 3 = " << setw(13) << setprecision(12) << b(2) << endl;
+    R.save(fileigvec,raw_ascii);
+    A.save(fileigval,raw_ascii);
+    return 0;
+}
+
+void Tridiag(mat &A, int n, double rho_min, double rho_max){
+    double h, e, d;
+    
+    h = (rho_max - rho_min)/(n+1);
+    
+    d = 2.0/(h*h);
+    e = -1.0/(h*h);
+    vec V = linspace<vec>(rho_min+h, rho_max-h, n);
+    
+    A.zeros();
+    
+    for (int i = 0; i < n; i++){
+        A(i,i) = d + V(i)*V(i);
+        if (i > 0){
+            A(i,i-1) = e;
+            A(i-1,i) = e;
+        }
+    }
+    return;
+}
+
+void Jacobi(mat &A, mat &R, int n, double epsilon){
+    int iterations;
+    int k, l;
+    double max_offdiag;
+    iterations = 0;
+    
+    max_offdiag = maxoffdiag(A, &k, &l, n);
+    
+    while (fabs(max_offdiag) > epsilon){
+        max_offdiag = maxoffdiag(A, &k, &l, n);
+        rotate(A, R, k, l, n);
+        iterations++; 
+    }
+    cout << "The number of rotations needed for epsilon = " << epsilon << " is: " << iterations << endl;
+    return;
+}
+
+double maxoffdiag(mat &A, int *k, int *l, int n){
+    double max = 0;
+    double temp_max;
+    
+    for (int i = 0; i < n; i++){
+        for (int j = i+1; j < n; j++){
+            temp_max = fabs(A(i,j));
+            if (temp_max > max){
+                max = temp_max;
+                *l = i;
+                *k = j;
+            }
+        }
+    }
+    
+    return max;  
+    
+}
+
+void rotate(mat &A, mat &R, int k, int l, int n){
+    double s,c,t,tau;
+    double a_kk, a_ll, a_ik, a_il, a_kl;
+    double r_ik, r_il;
+    
+    a_kk = A(k,k);
+    a_ll = A(l,l);
+    a_kl = A(k,l);
+    
+    if (a_kl != 0.0){
+        tau = (a_ll - a_kk)/(2*a_kl);
+        if (tau > 0){
+            t = 1.0/(tau + sqrt(1.0 + tau*tau));
+        }
+        else{
+            t = -1.0/(-tau + sqrt(1.0 + tau*tau));
+        }
+        c = 1.0/sqrt(1.0 + t*t);
+        s = c*t;
+    }
+    else{
+        c = 1.0;
+        s = 0.0;
+    }
+     
+    A(k,k) = a_kk*c*c - 2.0*a_kl*c*s + a_ll*s*s;
+    A(l,l) = a_ll*c*c + 2.0*a_kl*c*s + a_kk*s*s;
+    A(k,l) = 0.0;
+    A(l,k) = 0.0;
+    for (int i = 0; i < n; i++){
+        if((i != k) && (i != l)){
+            a_ik = A(i,k);
+            a_il = A(i,l);
+            A(i,k) = a_ik*c - a_il*s;
+            A(i,l) = a_il*c + a_ik*s;
+            A(k,i) = A(i,k);
+            A(l,i) = A(i,l);
+        }
+        
+        r_ik = R(i,k);
+        r_il = R(i,l);
+        R(i,k) = r_ik*c - s*r_il;
+        R(i,l) = r_il*c + s*r_ik;
+    }
+    return;
+}
+
+void initialise(int& n, double& rho_max, double& rho_min, double& epsilon){
+    cout << endl;
+    cout << "insert n" << endl;
+    cin >> n;
+    cout << "insert rho_max" << endl;
+    cin >> rho_max;
+    //cout << "insert epsilon" << endl;
+    //cin >> epsilon;
+    n = 500;
+    epsilon = 1.0e-8;
+    //rho_max = 5.0;
+    rho_min = 0;
+    cout << "n = " << n << endl;
+    cout << "rho_max = " << rho_max << endl;
+    cout << "epsilon = " << epsilon << endl;
+    return;
+}
+\end{lstlisting}

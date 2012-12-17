@@ -1,0 +1,38 @@
+\section{Numerical solution of the 20 x 20 Ising model}
+
+Figure(\ref{fig:T_1}) and (\ref{fig:T_24}) shows the results for the mean energy and the absolute value of the magnetization for a system with $T = 1.0 k_B T$ and $T = 2.4 k_B T$ for different number of Monte Carlo cycles.
+We can see that for temperature $T = 1.0 k_B T$ we get the same results for both random spins and all spins in one direction. This is not so strange because at $T = 1.0 k_B T$, 
+our system will try to end up with all spins in one direction. The system with $T = 2.4 k_B T$ is a little bit different. Here the final system can be at many configuration that give
+the same energy, so we need more Monte Carlo cycles to get the steady state. We see that for $10^6$ and higher we end up with the same $E$ and $|\mathcal{M}|$.\\
+Figure(\ref{fig:Accepted_states}) shows the number of accepted energy states for $T = 1.0 k_B T$ and $T = 2.4 k_B T$ for random spin and for all spins in one direction. 
+In the program we accept the new energy of the system if some random number $r \epsilon [0,1]$ is smaller or equal to a weight function $w = e^{-\Delta E /T}$. In the 
+Ising model this $\Delta E$ can only take five different values $\Delta E = -8$, $\Delta E = -4$, $\Delta E = 0$, $\Delta E = 4$ and $\Delta E = 8$. So when all the spins are pointing
+in the positive direction we get $\Delta E = 8$ which gives us $w = e^{-8} = 0.000335$ for $T = 1.0 k_B T$ and $w = e^{-8/2.4} = 0.0357$ $T = 2.4 k_B T$. This means that when $T = 1.0 k_B T$
+and we have all spins in positive direction the probability to accept the new configuration is quite small. For $T = 2.4 k_B T$ and all spins in positive direction, $w$ is much greater
+than for $T = 1.0 k_B T$, and the probability for accepting the new configuration is much greater. We can see that for $10^5$ Monte Carlo cycles and above, we have enough time to reach
+its steady state and the effect of the initial configuration is small.\\
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/T_1.png}
+\end{center}
+\caption{The plot shows the energy, $E$, and absolute value of the magnetization, $|\mathcal{M}|$, as a function of Monte Carlo cycles for the $20 \times 20$ numerical Ising model. The results are given per spin at $T = 1.0 k_B T$}
+\label{fig:T_1}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/T_24.png}
+\end{center}
+\caption{The plot shows the energy, $E$, and absolute value of the magnetization, $|\mathcal{M}|$, as a function of Monte Carlo cycles for the $20 \times 20$ numerical Ising model. The results are given per spin at $T = 2.4 k_B T$}
+\label{fig:T_24}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{images/Accepted_states.png}
+\end{center}
+\caption{The plot shows how many accepted configurations we get as a function of Monte Carlo cycles for the $20 \times 20$ numerical Ising model.}
+\label{fig:Accepted_states}
+\end{figure}

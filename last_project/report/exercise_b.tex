@@ -1,0 +1,38 @@
+\section{exercise b}
+
+Picard iteration is used for making non-linear PDE's behave like linear PDE's. In our case this is done by using $u$ from the last time step in $\alpha(u)$. 
+This means that we now have a known expression for $\alpha(u)$. With Picard iteration eq.(3) becomes
+
+\begin{equation}
+  a(u,v) = (\rho(u,v) + \Delta t (\alpha(u_1) \nabla u,\nabla v))dx
+\end{equation}
+
+and eq.(4) is unchanged
+
+\begin{equation}
+ L(v) = (\rho(I(\vec{x}),v)  + \Delta t(f^n,v))dx
+\end{equation}
+
+\lstset{
+language=Python,
+basicstyle=\footnotesize,
+backgroundcolor=\color{grey}
+}
+
+
+The Picard iterations 
+
+\begin{lstlisting}
+  u = Function(V)
+  eps = 1.0
+  tol = 1.0E-5
+  iter = 0
+  maxiter = 25
+  
+  while eps > tol and iter < maxiter:
+      iter += 1
+      solve(a == L, u, bcs)
+      diff = u.vector().array() - u_k.vector().array()
+      eps = numpy.linalg.norm(diff, ord=numpy.Inf)
+      u_k.assign(u)
+\end{lstlisting}

@@ -1,0 +1,50 @@
+\section{Exercise 2d}
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.70]{data_2d/eigenvec/pictures/eigenvec_rep_n=1000_rho=50,0_lambda0.png}
+\end{center}
+\caption{The plot shows the wave function for the first eigenvalue for two electrons with no coulomb interaction where $\omega = 0.01, 0.5, 1.0, 5,0$}
+\label{plot_similarity_trans}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.82]{data_2d/eigenvec/pictures/eigenvec_rep_n=1000_rho=50,0_lambda1.png}
+\end{center}
+\caption{The plot shows the wave function for the second eigenvalue for two electrons with no coulomb interaction where $\omega = 0.01, 0.5, 1.0, 5,0$}
+\label{plot_similarity_trans}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.82]{data_2d/eigenvec/pictures/eigenvec_rep_n=1000_rho=50,0_lambda2.png}
+\end{center}
+\caption{The plot shows the wave function for the third eigenvalue for two electrons with no coulomb interaction where $\omega = 0.01, 0.5, 1.0, 5,0$}
+\label{plot_similarity_trans}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.82]{data_2d/eigenvec_coulomb/pictures/eigenvec_rep_n=1000_rho=50,0_lambda0.png}
+\end{center}
+\caption{The plot shows the wave function for the first eigenvalue for two electrons with coulomb interaction where $\omega = 0.01, 0.5, 1.0, 5,0$}
+\label{plot_similarity_trans}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.82]{data_2d/eigenvec_coulomb/pictures/eigenvec_rep_n=1000_rho=50,0_lambda1.png}
+\end{center}
+\caption{The plot shows the wave function for the second eigenvalue for two electrons with coulomb interaction where $\omega = 0.01, 0.5, 1.0, 5,0$}
+\label{plot_similarity_trans}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.82]{data_2d/eigenvec_coulomb/pictures/eigenvec_rep_n=1000_rho=60,0_lambda2.png}
+\end{center}
+\caption{The plot shows the wave function for the third eigenvalue for two electrons with coulomb interaction where $\omega = 0.01, 0.5, 1.0, 5,0$}
+\label{plot_similarity_trans}
+\end{figure}
+
+\newpage

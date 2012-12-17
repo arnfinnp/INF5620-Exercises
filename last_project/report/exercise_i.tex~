@@ -1,0 +1,28 @@
+\section{exercise i}
+
+In this exercise we are going to apply the group finite element method to the $\alpha(u)$ coefficient. From earlier we have found the 
+expression
+
+\begin{equation}
+ \int_{\Omega} \rho u^nv + \Delta t \alpha(u^n) \nabla u^n \cdot \nabla v - \rho u^{n-1}v + \Delta t f^n v dx
+\end{equation}
+
+We now apply the group finite element method to the $\alpha(u)$
+
+\begin{equation}
+ \alpha(u) = \alpha \left( \sum_j u_j \varphi_i()x \right) \approx \sum_{j=1}^n \alpha(u_j) \varphi_j
+\end{equation}
+
+We also write $u$ as linear combinations of the basis $V$
+
+\begin{equation}
+ u = \sum_k c_k \varphi_k
+\end{equation}
+
+we can now insert these two equations back into our integral
+
+\begin{equation}
+ \int_{\Omega} \rho \sum_k c_k \varphi_k^nv + \Delta t \sum_{j=1}^n \alpha(u_j^n) \varphi_j \sum_k c_k \nabla \varphi_k^n \cdot \nabla v - \rho \sum_k c_k \varphi_k^{n-1}v + \Delta t f^n v dx
+\end{equation}
+
+

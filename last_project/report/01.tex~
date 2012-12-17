@@ -1,0 +1,141 @@
+
+\section{Random walks in one dimension}
+Statistiske krav til en RW: 
+
+
+\subsection{Generelt om 1d RW}
+Posisjonen til en RW er etter $n$ steg er
+$$
+ X = \sum_{i=1}^n u_i 
+$$
+
+hvor $u_i = \pm 1$. 
+Fint å vise ved eksempel hvordan sannyynlighetsdistribusjonen utvikler seg.
+\begin{itemize}
+ \item Vi antar at sannsynligheten er like stor for å gå til høyre som venstre . $p = 0.5$
+ \item Lag en tegning. Koeffisientene er vektingen til hver posisjon
+ \item $P_1 =  p(\delta(x-1) + \delta(x+1)$
+ \item $P_2 =  p^2(\delta(x-2) + 2\delta(x) + \delta(x+2)$
+ \item $P_2 =  p^3(\delta(x-3) + 2\delta(x-1) + 2\delta(x+1)+ \delta(x+3)$
+ \item $\cdots$
+ \item Fortsetter vi får vi en binomial distribusjonLar vi $n$ gå mot et stort tall går dette mot en Gaussisk distribusjon
+ \item $P_n \approx \sqrt{\frac{2}{\pi n}} e^{-\frac{1}{2} \frac{x^2}{n}}.$
+\end{itemize}
+
+Den generelle formen er
+$$
+ P(x) \approx \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2} \left(\frac{x-\mu}{\sigma}\right)^2}
+$$
+hvor $\mu$ er gjennomsnittet og $\sigma$ er standardavviket.
+
+\subsection{Probability Densities}
+\subsection*{Analytisk}
+Vi har funnnet at den generelle formen for sansynlighetstettheten er
+$$
+ P(x) \approx \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{1}{2} \frac{(x-\mu)^2}{\sigma}}
+$$
+hvor $\mu$ er gjennomsnittet og $\sigma$ er standardavviket.
+
+\subsection*{Numerisk}
+\begin{itemize}
+ \item For hver walkers: Generer et arrays med $n$ steg ved å bruke $y = floor(3*rand(n)) - 1$
+ \item Summer opp for å finne posisjonen etter $l$-steg: $x(l) = sum(y(1:l))$.
+ \item Slå sammen resultatene fra alle RW-ene og lag et histogram. Histogrammet representerer distribusjonen.
+\end{itemize}
+Hver gang en posisjon måles
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.45\textwidth]{images/RW/a.pdf}
+ % 6particles_w1.png: 1192x825 pixel, 90dpi, 33.64x23.29 cm, bb=0 0 954 660
+ \caption{Sannsynlighetstetthet etter $N$ steg. Walkerene diffunderer fra området med høy sannsynlighetstetthet til områder med lav tetthet.}
+ \label{fig:RW:a}
+\end{figure}
+
+\subsection{Moments}
+\subsection*{Analytisk}
+Momentene finner vi ved
+$$
+ M_l = \bra x^l \ket = \int x^l P(x) dx
+     \propto \int \frac{x^l}{\sqrt{n}} e^{-\frac{1}{2} \frac{x^2}{n}} dx.
+$$
+Et bytte av variable, $ x = y \sqrt{n}$, gir
+$$
+ M_l \propto n^{l/2} \int y^l e^{-\frac{1}{2}y^2} dy.
+$$
+Vi ser at alle odde momenter må være null siden det gir en odd funksjon. For partallene får vi relasjonen
+$$
+ M_l \propto n^{l/2}
+$$
+En generell relasjon for momenter er 
+$$
+ M_l \propto n^{\alpha_l},
+$$
+hvor for en random walker er 
+$$
+ \alpha_l = \frac{l}{2} = \frac{l}{D_{RW}}.
+$$
+Vi sier at dimensjonenen til en random walker er $D_{RW} = 2$. 
+
+Fra dette ser vi at vi ikke trenger å beregne momenter høyere enn $l=2$ siden alle høyere momenter er produkter av $n$. Merk at det vil være en skalering av momentene som påvirker resultatet dersom RRW-en ikke har diffundert lenge nok.
+
+\subsection*{Numerisk}
+For å finne momentene numerisk bruker vi
+$$
+ M_l = \frac{1}{n}\sum_i^n x_i^l = \frac{1}{n}\sum_i^n \left( \sum_j^i u_j \right)^l
+$$
+Vi observerer at det er avvik for små $n$. For å analysere momentene for små $n$ må vi innføre en korreksjon av skaleringen i den analytiske modellen[s18-19]. Et log-log plot viser at oppførselen går asymptotisk mot 2.
+
+\subsection{Data-Collapse}
+For å fremkalle et datakollaps for endelig størrelse skalering kan vi plotte
+$$
+ P_n(x,L) = f(x/\sqrt n , L/\sqrt n)
+$$
+Se på sannsynlighetsdistribusjonen og bytt litt variable for å vise at dette stemmer.
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.45\textwidth]{images/RW/c.pdf}
+ % 6particles_w1.png: 1192x825 pixel, 90dpi, 33.64x23.29 cm, bb=0 0 954 660
+ \caption{Reskalering av sannsynlighetstettheten.}
+ \label{fig:RW:c}
+\end{figure}
+
+\subsection{Dimensionality}
+En RW har alltid dimensjon 2. Merk
+$$
+ D_{RW} = 2 \neq d,
+$$
+hvor $d$ er dimensjonen til gitteret.
+
+\subsection{Universality}
+Vi finner at for en RW er skaleringen helt lik uansett dimensjon til gitteret. For alle RW-er er $D_{RW} = 2$, og de vil alle produsere det samme data-kollaps plottet. Det har ingen ting å si hvor mange dimesjoner en RW-er beveger seg i. Den er helt uavhengig. Dette gjelder ikke for en SRW.
+Scale invariance: Zoomer vi inn på et område av en radnom walk og sammenligner det med et området vil de være 'identiske' Det samme gjelder større deler av en RW. En random walk med lengde $N$ er lik en med lengde $N/5$, så lenge vi ikke kan skille enkeltsteg.
+
+På alle nivåer vi ikke klarer å skille individuelle steg finner vi at alle Random Walks ser like ut. Etter noen steg er RW's statistisk uskillbare fra andre RW.  Uavhengigheten av oppførselen på et mikroskopisk nivå kalles universalitet.
+
+\subsection{Additionally: Finite Size}
+Å se på finite size effects i RWs er kanskje bra å sammenligne det med perkolasjon... - Jeg håper dere liker mitt norsk! :-)\\
+Denne gangen, walkeren kan ikke bevege seg utenfor et område med lengde $L$. Hvis han vil, la vi ham bare vente ved veggen.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.35]{images/RW/dim1_lt.png}
+\caption{Noe random walkers med $L=50$. Den nederste kurven viser hvordan walkeren prøver flere ganger å komme seg under veggen.}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\mbox{\subfigure{\includegraphics[scale=0.28]{images/RW/dim1_l10.png}}
+\subfigure{\includegraphics[scale=0.29]{images/RW/dim1_l50.png}}}
+\caption{Sannsynlighetstettheten $P_n(x)$ for to forskjellige lengder $L$. Som forventet kan walkeren ikke bevege seg utenfor veggene. I tillegg ser man at distribusjonene er ikke lenger Gaussian - avviken fra den Gaussian kurve er sterkere jo mindre $L$ er valgt.}
+\label{fig:dim1_lP}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.35]{images/RW/dim1_finmo.png}
+\caption{Jo mindre lengden $L$ er valgt, jo verre proporsjonaliteten $M_2^{(n)}\propto n$ blir. Ned til $L=100$  har vi mer eller mindre ingen avvik fra $L = \infty$. Med $L=50$ har vi allerede en betydelig avvik for stor $n$ (vi forventer avviker hvis $L < n$) og alt blir veldig dårlig hvis $L < \sqrt n$: Kurven med $L = 10$ forholder seg helt annerledes.}
+\end{center}
+\end{figure}
+

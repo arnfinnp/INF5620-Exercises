@@ -1,0 +1,169 @@
+\section{Exercise 2e}
+
+\subsection{Code-Lanczos}
+
+I didn't get much time to play around with this. But because Lanczos' algorithm makes a matrix tri-diagonal, applying it on our matrix will make the algorithm 
+much slower, so it doesn't make much sense applying it on our matrix.
+
+My method is not that good to use on matrices with $n > 10^4$, because it uses matrix operations, and therefor it uses lots of RAM. 
+
+\begin{lstlisting}
+ 
+ #include <cstdlib>
+#include <iostream>
+#include <armadillo>
+#include <math.h>
+#include <stdio.h>
+#include <ctime>
+#include <iomanip>
+#include <fstream>
+
+using namespace std;
+using namespace arma;
+
+void Tridiag(mat &, int, double, double);
+void initialise(int &, double &, double &);
+void gram_schmidt(mat &, int, int);
+void lanczos(mat &, vec &, vec &, int);
+
+int main(int argc, char** argv) {
+    clock_t start, finish;
+    double rho_max;
+    double rho_min;
+    int n;
+    
+    initialise(n, rho_max, rho_min);
+    
+    mat A(n,n);
+    mat T(n,n);
+    vec eigval;
+    mat eigvec;
+    vec beta(n-1);
+    vec alpha(n);
+    
+    vec eigval_A;
+    mat eigvec_A;
+        
+    beta.zeros();
+    alpha.zeros(); 
+    T.zeros(); 
+    
+    Tridiag(A, n, rho_min, rho_max);
+        
+    start = clock();
+    
+    lanczos(A, alpha, beta, n);
+            
+    T.diag() = alpha;
+    T.diag(-1) = beta;
+    T.diag(1) = beta;
+    
+    eig_sym(eigval, eigvec, T);
+        
+    finish = clock();
+    cout << "Time used: " << 1000*((finish - start)/CLOCKS_PER_SEC) << " ms." << endl;
+    
+    cout << "eigenvalue 1 = " << setw(13) << setprecision(12) << eigval(0) << endl;
+    cout << "eigenvalue 2 = " << setw(13) << setprecision(12) << eigval(1) << endl;
+    cout << "eigenvalue 3 = " << setw(13) << setprecision(12) << eigval(2) << endl;
+    
+    start = clock();
+    eig_sym(eigval_A, eigvec_A, A);
+    finish = clock();
+    cout << "Time used: " << 1000*((finish - start)/CLOCKS_PER_SEC) << " ms." << endl;
+    
+    cout << "eigenvalue 1 = " << setw(13) << setprecision(12) << eigval_A(0) << endl;
+    cout << "eigenvalue 2 = " << setw(13) << setprecision(12) << eigval_A(1) << endl;
+    cout << "eigenvalue 3 = " << setw(13) << setprecision(12) << eigval_A(2) << endl;
+    return 0;
+}
+
+void lanczos(mat &A, vec &alpha, vec &beta, int n){
+    mat Q(n,n+1);
+    mat r(n,n+1);
+    vec beta_temp(n+1);
+    vec alpha_temp(n+1);
+    mat I(n,n);
+    vec q;
+    rowvec q_T;
+    beta_temp.zeros();
+    alpha_temp.zeros();
+    q.zeros();
+    q_T.zeros();
+    r.zeros();
+    Q.zeros();
+    I.eye();
+    Q.col(1) = randu<vec>(n);
+    Q.col(1) = Q.col(1)/norm(Q.col(1),2);
+    r.col(0) = Q.col(1);
+    beta_temp(0) = 1;
+    for (int i = 1; i < n+1; i++){
+        Q.col(i) = r.col(i-1)/beta_temp(i-1);
+        q = Q.col(i);
+        q_T = trans(q);
+        alpha_temp(i) = as_scalar(q_T*A*q);
+        r.col(i) = (A - alpha_temp(i)*I)*q - beta_temp(i-1)*Q.col(i-1);
+        beta_temp(i) = norm(r.col(i),2);
+        gram_schmidt(Q, i, n);
+    }
+    for (int i = 0; i < n-1; i++){
+        beta(i) = beta_temp(i+1);
+        alpha(i) = alpha_temp(i+1);
+    }
+    alpha(n-1) = alpha_temp(n);
+    return;
+    
+}
+
+void gram_schmidt(mat &Q ,int i, int n){    
+    vec temp_Q(n);
+    temp_Q.zeros();
+    if (i == 1){
+        Q.col(i) = Q.col(i);
+    }
+    else{
+        for (int j = 1; j < i; j++){
+            temp_Q = ((dot(Q.col(i),Q.col(j)))/(norm(Q.col(j),2)))*Q.col(j);
+        }
+        Q.col(i) -= temp_Q;
+    }
+    return;
+}
+
+void Tridiag(mat &A, int n, double rho_min, double rho_max){
+    double h, e, d;
+    
+    h = (rho_max - rho_min)/(n+1);
+    
+    d = 2.0/(h*h);
+    e = -1.0/(h*h);
+    vec V = linspace<vec>(rho_min+h, rho_max-h, n);
+    
+    A.zeros();
+    
+    for (int i = 0; i < n; i++){
+        A(i,i) = d + V(i)*V(i);
+        if (i > 0){
+            A(i,i-1) = e;
+            A(i-1,i) = e;
+        }
+    }
+    return;
+}
+
+void initialise(int& n, double& rho_max, double& rho_min){
+    cout << endl;
+    cout << "insert n" << endl;
+    cin >> n;
+    cout << "insert rho_max" << endl;
+    cin >> rho_max;
+    
+    //n = 7;
+    //rho_max = 5.0;
+    rho_min = 0;
+    
+    cout << "n = " << n << endl;
+    cout << "rho_max = " << rho_max << endl;
+    return;
+}
+\end{lstlisting}

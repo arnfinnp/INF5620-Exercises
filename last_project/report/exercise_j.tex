@@ -1,0 +1,25 @@
+\section{exercise j}
+
+An other way to solve the nonlinear discretized equation is to use Newtons method.
+
+\begin{equation}
+ F_i \equiv \int_{\Omega} \rho (u^n - u^{n-1})v + \Delta t \alpha(u^n) \nabla u^n \cdot \nabla v -  \Delta t f^n v dx
+\end{equation}
+
+we now use $u = \sum_j u_j \varphi_j$ and $v = \varphi_i$
+
+\begin{equation}
+ F_i \equiv \int_{\Omega} \rho (\sum_j u_j^n \varphi_j - u^{n-1})\varphi_i + \Delta t \alpha(\sum_l u_l^n \varphi_l)  \sum_j \nabla u_j^n \varphi_j \cdot \nabla \varphi_i -  \Delta t f^n \varphi_i dx
+\end{equation}
+
+\begin{equation}
+ F_i \equiv \sum_j \int_{\Omega} \rho ( u_j^n \varphi_j - u^{n-1})\varphi_i dx  + \Delta t \sum_j \int_{\Omega} \alpha(\sum_l u_l^n \varphi_l) \nabla u_j^n \varphi_j \cdot \nabla \varphi_i dx -  \Delta t \int_{\Omega} f^n \varphi_i dx
+\end{equation}
+
+We then use $ \sum_j \frac{\partial F_i}{\partial u_j} \delta u_j = - F_i$
+
+\begin{equation}
+ \frac{\partial F_i}{\partial u_j} \equiv \int_{\Omega} \rho \varphi_j \varphi_i dx  + \Delta t \sum_j \int_{\Omega} \alpha'(\sum_l u_l^n \varphi_l) \nabla \sum_j( u_j^n \varphi_j) \cdot \nabla \varphi_i + \alpha(\sum_l u_l^n \varphi_l) \nabla \varphi_j \cdot \nabla \varphi_i dx
+\end{equation}
+
+This is how far I got...

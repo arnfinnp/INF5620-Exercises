@@ -1,0 +1,61 @@
+\section{Brute Force Monte Carlo}
+
+The basic idea behind solving an integral with Brute Force Monte Carlo, is to randomly pick a number that is an element of the integration limits. 
+This is how it is done in the program \\
+
+\begin{lstlisting}
+  // N is the number of MC cycles
+  for i = 0,1,2,...,N-1
+    r1 = "random_number" x lambda;
+    r2 = "random_number" x lambda;
+    // lambda is the upper integration limit for r1 and r2.
+    theta1 = "random_number" x PI;
+    theta2 = "random_number" x PI;
+    phi1 = "random_number" x 2PI;
+    phi2 = "random_number" x 2PI;
+    sum += f(x);
+    sum_sigma += f(x)*f(x);
+\end{lstlisting}
+
+Table(\ref{ex_c_BFMC}) shows the results from the Brute Force Monte Carlo integration, we can see that for $N = 10^7$ we get almost the same precision that
+Gass-Laguerre gave us for $N = 30$. From table(\ref{time_used_quadrature}) we can see that Gass-Laguerre uses $34$ seconds to calculate the integral 
+for $N = 30$ and from table(\ref{time_used_MC}) we see that BFMC uses roughly $1$ seconds to calculate $N = 10^7$. So it seems that Monte Carlo (MC) is a mush faster
+way to calculate the integrals. One thing we need to remember is the variance we get when we use MC methods. We can be more sure about the results we 
+get from the quadrature methods than the results we get from the MC methods.\\
+
+\begin{table}
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|}
+  \hline
+  $N$        & $\text{I}_{\text{numerical}}$ & Variance & $\text{I}_{\text{exact}}$ & Error \\ \hline
+  $10^2$     & $0.05196805$ & $0.032743034$ & $0.19276571$ &  $ 0.14079766$ \\ \hline
+  $10^3$     & $0.21693232$ & $0.085982067$ & $0.19276571$ &  $-0.02416661$ \\ \hline
+  $10^4$     & $0.20695352$ & $0.026741282$ & $0.19276571$ &  $-0.01418781$ \\ \hline
+  $10^5$     & $0.19680819$ & $0.007818738$ & $0.19276571$ &  $-0.00404248$ \\ \hline
+  $10^6$     & $0.19404401$ & $0.002517463$ & $0.19276571$ &  $-0.00127830$ \\ \hline
+  $10^7$     & $0.19215814$ & $0.000849197$ & $0.19276571$ &  $ 0.00060757$ \\ \hline
+  $10^8$     & $0.19263919$ & $0.000277755$ & $0.19276571$ &  $ 0.00012652$ \\ \hline
+  $10^9$     & $0.19277287$ & $0.000083714$ & $0.19276571$ &  $-0.00007164$ \\ \hline
+  $10^{10}$  & $0.19276814$ & $0.000083714$ & $0.19276571$ &  $-0.00000247$ \\ \hline
+\end{tabular}
+\caption{The table show the results from the numerical solution of eq.(\ref{numerical_gauss-laguerre}), the exact solution, $\frac{5\pi^2}{16^2} \approx 0.192766$, and the error}
+\label{ex_c_BFMC}
+\end{center}
+\end{table}
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.62]{images/brute_force_MC.png}
+\end{center}
+\caption{The figure shows the convergence of the numerical solution of the integral in eq.(\ref{eq:correlationenergy}) using Gauss-Laguerre integration}
+\label{ex_c_bfmc}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.62]{images/variance_brute_force_MC.png}
+\end{center}
+\caption{The figure shows the convergence of the numerical solution of the integral in eq.(\ref{eq:correlationenergy}) using Gauss-Laguerre integration}
+\label{ex_c_bfmc_var}
+\end{figure}

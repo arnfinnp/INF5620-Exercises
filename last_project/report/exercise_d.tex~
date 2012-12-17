@@ -1,0 +1,19 @@
+\section{exercise d}
+
+To get the information at $t = 0.05$ we use this if test
+
+\begin{lstlisting}
+if t > (0.05 - dt) and t < (0.05 + dt):
+    e = ue.vector().array() - u.vector().array()
+    E = numpy.sqrt(numpy.sum(e**2)/u.vector().array().size)
+    print 'error = ', E, 't = ', t, 'E/h = ', E/dt
+\end{lstlisting}
+
+And the results for mesh size $20$, $40$, $60$, $80$ and $100$ are\\
+
+$\text{error} =  0.000552450360912 \text{t} =  0.05 \text{E/h} =  0.883920577459$\\
+$\text{error} =  0.000244994642726 \text{t} =  0.05 \text{E/h} =  0.881980713815$\\
+$\text{error} =  0.0001376178238 \text{t} =  0.05 \text{E/h} =  0.880754072322$\\
+$\text{error} = 8.79935868532e-05 \text{t} = 0.05 \text{E/h} = 0.879935868532$\\
+
+respectivly

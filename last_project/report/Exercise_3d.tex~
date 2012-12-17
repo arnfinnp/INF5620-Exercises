@@ -1,0 +1,187 @@
+\section{Monte Carlo With importance sampling}
+
+The basics behind important sampling, is to choose some kind of distribution that has a shape close to the function we are going to integrate. So what 
+we are actually doing, is boxing our function inside some kind of six-dimensional shape.
+
+Given an integral
+
+\begin{equation}
+  \int_a^b F(x) dx
+\end{equation}
+
+We can rewrite this by using the PDF $p(x)$. We then get
+
+\begin{equation}
+  \int_a^b p(x) \frac{F(x)}{p(x)} dx
+\end{equation}
+
+by using the substitution $dy = p(x) dx$, we end up with
+
+\begin{equation}
+  \int_a^b \frac{F(x(y))}{p(x(y))} dy
+\end{equation}
+
+In our case we have the integral
+
+\begin{equation}
+  \int_0^{\infty} x^2 e^{-x} dx
+\end{equation}
+
+a good choice of $p(x)$ for this function is $p(x) = e^{-x}$. For $p(x)$ to be a PDF, it must normalized to $1$
+
+\begin{equation}
+  \int_0^{\infty} e^{-x} dx = 1
+\end{equation}
+
+\begin{equation}
+  \int_0^{\infty} e^{-x} dx = [-e^{-x}]_0^{\infty} = 0 + 1 = 1
+\end{equation}
+
+so it is normalized to $1$.
+The next step is to rewrite $p(x)$, because $x$ is the number we would like to use.
+
+\begin{equation}
+  y(x) = \int_0^{x} e^{-x'} dx' = [-e^{-x}]_0^{x} = 1 - e^{-x}
+\end{equation}
+
+This gives us
+
+\begin{equation}
+  \Rightarrow x = -\ln(1 - y)
+\end{equation}
+
+This is the equation that is going to give us random numbers for $r_1$ and $r_2$. Our code for picking random numbers is\\
+
+\begin{lstlisting}
+  for i = 0,1,2,...,N-1
+    r1 = -log(1 - "random_number");
+    r2 = -log(1 - "random_number");
+    theta1 = "random_number";
+    theta2 = "random_number";
+    phi1 = "random_number";
+    phi2 = "random_number";
+\end{lstlisting}
+
+The rest of the algorithm is the same as for Brute Force Monte Carlo.
+If we compare table(\ref{ex_d_ISMC}) and table(\ref{ex_c_BFMC}), we can see the results from Brute Force Monte Carlo(BFMC) and Monte Carlo with importance sampling(MCIS.
+We see that both methods gives almost the same result for the integral, but the variance is much better with MCIS than with BFMC. What this means is that
+we can be more sure about the results that MCIS gives us, than what BFMC gives us. \\
+One thing one can notice in table(\ref{ex_c_BFMC}) is that for $N = 10^{10}$ we actually get an error that is larger than for $N = 10^{9}$. But the variance
+is smaller for $N = 10^{10}$ than for $N = 10^{9}$, which means that the result for $N = 10^{10}$ is more certain than the answer we get from $N = 10^{9}$.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|}
+  \hline
+  $N$        & $\text{I}_{\text{numerical}}$ & Variance & $\text{I}_{\text{exact}}$ & Error \\ \hline
+  $10^2$     & $0.08670223$ & $0.016361713$ & $0.19276571$ &  $ 0.14079766$ \\ \hline
+  $10^3$     & $0.18539488$ & $0.029083106$ & $0.19276571$ &  $-0.02416661$ \\ \hline
+  $10^4$     & $0.18448627$ & $0.008215740$ & $0.19276571$ &  $-0.01418781$ \\ \hline
+  $10^5$     & $0.19041921$ & $0.002845753$ & $0.19276571$ &  $-0.00404248$ \\ \hline
+  $10^6$     & $0.19071905$ & $0.000969633$ & $0.19276571$ &  $-0.00127830$ \\ \hline
+  $10^7$     & $0.19219411$ & $0.000315950$ & $0.19276571$ &  $ 0.00060757$ \\ \hline
+  $10^8$     & $0.19261785$ & $0.000102018$ & $0.19276571$ &  $ 0.00012652$ \\ \hline
+  $10^9$     & $0.19275793$ & $0.000032839$ & $0.19276571$ &  $ 0.00007780$ \\ \hline
+  $10^{10}$  & $0.19274092$ & $0.000010383$ & $0.19276571$ &  $ 0.00024790$ \\ \hline
+\end{tabular}
+\caption{The table show the results from the numerical solution of eq.(\ref{numerical_gauss-laguerre}), the exact solution, $\frac{5\pi^2}{16^2} \approx 0.192766$, and the error}
+\label{ex_d_ISMC}
+\end{center}
+\end{table}
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.62]{images/MC_importance_sampling.png}
+\end{center}
+\caption{The figure shows us the convergence of the numerical solution of the integral using Monte Carlo with importance sampling. We can see that it converges towards the exact solution.}
+\label{ex_c_bfmc}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.62]{images/variance_MC_importance_sampling.png}
+\end{center}
+\caption{The figure shows the convergence of the variance given by Monte Carlo with importance sampling. We can see that it converges toward zero.}
+\label{ex_c_bfmc_var}
+\end{figure}
+
+\subsection{CPU time}
+
+In table(\ref{time_used_MC}) we can see the time used by BFMC and MCIS. As we can see the time used is almost the same for both methods. So it seems 
+there is no drawback in using MCIS instead of BFMC, if we only look at the time use. If we take in account that MCIS gives us smaller variances, then 
+we can conclude that MCIS is a much better method than BFMC. \\
+
+\begin{table}
+\begin{center}
+\begin{tabular}{ |l|l|l|}
+  \hline
+  $N$        & BFMC          & MCIS          \\ \hline
+  $10^2$     & $   0.000055$ & $   0.000054$ \\ \hline
+  $10^3$     & $   0.00013$  & $   0.00016$  \\ \hline
+  $10^4$     & $   0.00082$  & $   0.00104$  \\ \hline
+  $10^5$     & $   0.0077$   & $   0.0097$   \\ \hline
+  $10^6$     & $   0.075$    & $   0.096$    \\ \hline
+  $10^7$     & $   0.82$     & $   0.98$     \\ \hline
+  $10^8$     & $   7.7$      & $  10.2$      \\ \hline
+  $10^9$     & $ 102$        & $ 101$        \\ \hline
+  $10^{10}$  & $1059$        & $1022$        \\ \hline
+\end{tabular}
+\caption{The time used by brute force Monte Carlo(BFMC) and Monte Carlo With importance sampling(MCIS) to calculate the integral for different integration points. The time is given in seconds, and the number of cores used is 4}
+\label{time_used_MC}
+\end{center}
+\end{table}
+
+In table(\ref{time_used_paralleization}) we can see the time used by BFMC and MCIS on 1,2,3 and 4 cores. We can see that the scaling for the 
+CPU time is roughly linear. So Montecarlo integration scales good with increasing number of CPUs. \\
+
+\begin{table}
+\begin{center}
+\begin{tabular}{ |l|l|l|}
+  \hline
+  $Cores$ & BFMC       & MCIS       \\ \hline
+  $1$     & $   30.1$  & $   38.5$  \\ \hline
+  $2$     & $   15.1$  & $   19.4$  \\ \hline
+  $3$     & $   10.1$  & $   13.1$  \\ \hline
+  $4$     & $   8.3$   & $   10.8$  \\ \hline
+\end{tabular}
+\caption{The time used by brute force Monte Carlo(BFMC) and Monte Carlo With importance sampling(MCIS) to calculate the integral for different numbers of cores. The time is given in seconds, and the number of MC-cycles is $N = 10^8$}
+\label{time_used_paralleization}
+\end{center}
+\end{table}
+
+\newpage
+\subsection{openMPI}
+
+An easy way to parallelize this problem, is to give each process its own part of $N$. So if $N = 100$ and we use four cores, then each 
+core gets $N_{\text{core}} = \frac{N}{4} = 25$. Each core then does $25$ Monte Carlo iterations, and at the end the sum from all the processes
+is summed together.\\
+
+\begin{lstlisting}
+// Each process gets ist part of N.
+// If N%processes > 0, then the remaning part of 
+// N is distributet to process 0,1,2,... until 
+// N_remaning%processes = 0
+
+for (long i = 0; i < N % num_procs; i++){
+    if (my_rank == i){
+      my_i += 1;
+    }
+    if (my_rank > i){
+      my_i_start += 1;
+    }
+}    
+my_i_start += 1;
+idum = -1*(my_rank + 1);
+for (long i = my_i_start; i < my_i_start+my_i; i++){
+    "pick random numbers"
+    sum += f(x)
+    sum_sigma += f(x)*f(x)
+}
+MPI_Reduce(&sum,&tot_sum,1,MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+MPI_Reduce(&sum_sigma,&tot_sigma,1,MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+\end{lstlisting}
+
+This is actually all that is needed to parallelize our problem. I could also have used openMP, which is much
+simpler, but it only works on shared memory systems. openMPI works on larger systems, like Abel. One good combination
+is to use openMP in combination with openMPI. This will in many cases use less memory on big systems like Abel.

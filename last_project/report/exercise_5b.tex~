@@ -1,0 +1,230 @@
+\section{exercise 5b}
+
+In this project we are going to implement three algorithm for solving the diffusion equation in one dimension. The three methods are the Forward Euler method,
+the Backward Euler method, and Crank-Nicolson scheme. The first method is a so called explicit method, and the last two are so called implicit methods. I'll explain the difference later.\\
+
+--------------------------------------------------------------------------------------------------------------------------------
+  Kanskje legge til et plott der metodene sammenlignes for en kjent funksjon!\\
+--------------------------------------------------------------------------------------------------------------------------------\\
+
+\subsection{Forward Euler}
+
+In one dimension the diffusion equation is 
+
+\begin{equation}
+    \frac{\partial^2 u(x,t)}{\partial x^2} = \frac{\partial u(x,t)}{\partial t}
+\end{equation}
+
+or 
+
+\begin{equation}
+    u_{xx} = u_{t}
+\end{equation}
+
+To solve this equation numerically we first have to discretize it. 
+The time dependent part can be written as
+
+\begin{equation}
+    u_{t} \approx \frac{u(x,t+\Delta t) - u(x,t)}{\Delta t}
+\end{equation}
+
+or
+
+\begin{equation}
+    u_{t} \approx \frac{u(x_i,t_{j+1}) - u(x_i,t_j)}{\Delta t}
+\end{equation}
+
+or in a more practical way
+
+\begin{equation}
+    u_{t} \approx \frac{u_{i,j+1} - u_{i,j}}{\Delta t}
+\end{equation}
+
+where $i$ represent some position and $j$ represent some time.
+
+
+\begin{equation}
+    u_{xx} \approx \frac{u(x + \Delta x,t) - 2u(x,t) + u(x + \Delta x,t)}{\Delta x^2}
+\end{equation}
+
+or 
+
+\begin{equation}
+    u_{xx} \approx \frac{u(x_{i+1},t_j) - 2u(x_i,t_j) + u(x_{i-1},t_j)}{\Delta x^2}
+\end{equation}
+
+or in a more practical way
+
+\begin{equation}
+    u_{xx} \approx \frac{u_{i+1,j} - 2u_{i,j} + u_{i-1,j}}{\Delta x^2}
+\end{equation}
+
+If we now combine these two equations, we get
+
+\begin{align*}
+    \frac{u_{i+1,j} - 2u_{i,j} + u_{i-1,j}}{\Delta x^2} &= \frac{u_{i,j+1} - u_{i,j}}{\Delta t} \\
+    \frac{\Delta t}{\Delta x^2}(u_{i+1,j} - 2u_{i,j} + u_{i-1,j}) &=  u_{i,j+1} - u_{i,j} \\
+    \Rightarrow u_{i,j+1} &= \alpha u_{i+1,j} + (1 - 2\alpha)u_{i,j} + \alpha u_{i-1,j}, \qquad \alpha = \frac{\Delta t}{\Delta x^2} \\
+\end{align*}
+
+This set of equations can be solved for $i = 0,1,2,\cdot,n_x$ and for $j = 0,1,2,\cdot,n_t$, where $n_x$ is the number of points in the x-direction and $n_t$ is the number of time steps.
+We also have $\Delta x = \frac{1}{n_x + 1}$. $\Delta t$ must be chosen based on the stability-criteria, we'll come back to this later.
+Because all the parts on the right side of the equation is known, we call this an explicit method. \\
+
+From the equation we see that there might be some problems for $i = 0$ and $i = n_x$, here we have to know $u_{-1,j}$ and $u_{n_x+1,j}$. This can be solved by introducing a so called ghost mesh, which is 
+an extra position point in the start and end of our position grid. These values can be found by using our boundary conditions.\\
+
+--------------------------------------------------------------------------------------------------------------------------------
+  Legg inn noe matrisegreier her!\\
+--------------------------------------------------------------------------------------------------------------------------------\\
+\subsection{Backward Euler}
+
+\begin{equation}
+    u_{t} \approx \frac{u(x,t) - u(x,t-\Delta t)}{\Delta t}
+\end{equation}
+
+or
+
+\begin{equation}
+    u_{t} \approx \frac{u(x_i,t_j) - u(x_i,t_{j-1})}{\Delta t}
+\end{equation}
+
+or in a more practical way
+
+\begin{equation}
+    u_{t} \approx \frac{u_{i,j} - u_{i,j-1}}{\Delta t}
+\end{equation}
+
+$u_{xx}$ is the same as for the Forward Euler method. We now get
+
+\begin{align*}
+    \frac{u_{i+1,j} - 2u_{i,j} + u_{i-1,j}}{\Delta x^2} &= \frac{u_{i,j} - u_{i,j-1}}{\Delta t} \\
+    \alpha (u_{i+1,j} - 2u_{i,j} + u_{i-1,j}) &=  u_{i,j} - u_{i,j-1}, \qquad \alpha = \frac{\Delta t}{\Delta x^2} \\
+\end{align*}
+
+and with a little bit of rearrangement we end up with
+
+\begin{equation}
+  \alpha -u_{i+1,j} + (1 + 2\alpha)u_{i,j} - \alpha u_{i-1,j} = u_{i,j+1}
+  \label{eq:backward_euler}
+\end{equation}
+
+
+Here we can see the main difference between Forward and Backward Euler. Backward Euler uses one position in the previous time step to find three different positions in the new time step, 
+while Forward Euler uses three different positions in the previous to find one new position in the new time step. So while Forward Euler can be solve pretty much straight forward,
+Backward Euler needs a little bit more finesse.\\
+The first step in solveing eq.(\ref{eq:backward_euler}) is to write it on the matrix form 
+
+\begin{equation}
+    \vec{A} \vec{V}_j = \vec{V}_{j-1},
+    \label{eq:backward_euler_matrix}
+\end{equation}
+
+where
+
+\begin{equation}
+     \vec{V}_j = \left( \begin{array}{c} 
+	u_{0,j}     \\
+	u_{1,j}     \\
+	u_{2,j}     \\
+	\dots       \\
+	u_{n_x-1,j} \\
+	u_{n_x,j}   \\
+    \end{array} \right)
+    \label{vec:vj}
+\end{equation} 
+
+and 
+
+\begin{equation}
+     \vec{V}_{j-1} = \left( \begin{array}{c} 
+	u_{0,j-1}     \\
+	u_{1,j-1}     \\
+	u_{2,j-1}     \\
+	\dots       \\
+	u_{n_x-1,j-1} \\
+	u_{n_x,j-1}   \\
+    \end{array} \right)
+    \label{vec:vj-1}
+\end{equation} 
+
+and
+
+\begin{equation}
+     \vec{A} = \left( \begin{array}{ccccccc} 
+	(1 + 2\alpha) & -\alpha       &       0       & 0       & \dots   & 0     & 0            \\
+	-\alpha       & (1 + 2\alpha) & -\alpha       & 0       & \dots   & 0     & 0            \\
+	0             & -\alpha       & (1 + 2\alpha) & -\alpha & \dots   & \dots & \dots        \\
+	0             & 0             & \dots         & \dots   & \dots   & 0     & 0 \\
+	\dots         & \dots         & \dots         & 0       & -\alpha & (1 + 2\alpha) & -\alpha\\
+	0             & 0             & \dots         & 0       & 0       & -\alpha       & (1 + 2\alpha) \\
+    \end{array} \right)
+    \label{eq:jacobi}
+\end{equation} 
+
+Eq.(\ref{eq:backward_euler_matrix}) can either be solved by finding the inverse of $\vec{A}$, which involves roughly $~ \mathcal{O}(N^3)$ operations, or we can take advantage of the fact that $\vec{A}$ is 
+a tridiagonal matrix which we can solve with $\mathcal{O}(6N)$ operations.
+
+--------------------------------------------------------------------------------------------------------------------------------
+  Trenger litt mer her + hva er implicit.\\
+--------------------------------------------------------------------------------------------------------------------------------\\
+\subsection{Crank-Nicolson scheme}
+
+The Crank-Nicolson scheme uses the so-called $\theta-rule$ to get an equation that is different from the Forward Euler method and the Backward Euler method. 
+If we combine the Forward Euler method and the Backward Euler method then end up with the equation
+
+\begin{equation}
+  \frac{\theta}{\Delta x^2} \left( u_{i-1,j} - 2u_{i,j} + u_{i+1,j}  \right) + \frac{1 - \theta}{\Delta x^2} \left( u_{i+1,j-1} - 2u_{i,j-1} + u_{i-1,j-1} \right) = \frac{1}{\Delta t} \left( u_{i,j} - u_{i,j-1} \right)
+  \label{eq:crank_nicolson_theta}  
+\end{equation}
+
+We can see that if we insert $\theta = 0$ into eq.(\ref{eq:crank_nicolson_theta}) we get 
+
+\begin{equation}
+  \frac{1}{\Delta x^2} \left( u_{i+1,j-1} - 2u_{i,j-1} + u_{i-1,j-1} \right) = \frac{1}{\Delta t} \left( u_{i,j} - u_{i,j-1} \right)
+\end{equation}
+
+which is the Forward Euler method (we can see that it only depends on one position in the new time step). If we insert $\theta = 1$ into eq.(\ref{eq:crank_nicolson_theta}) we get 
+
+\begin{equation}
+  \frac{1}{\Delta x^2} \left( u_{i-1,j} - 2u_{i,j} + u_{i+1,j}  \right) = \frac{1}{\Delta t} \left( u_{i,j} - u_{i,j-1} \right)
+\end{equation}
+
+which is the Backward Euler method. What Crank and Nicolson did was to use $\theta = \frac{1}{2}$, they then ended up with the equation
+
+\begin{equation}
+  \frac{1}{2\Delta x^2} \left( u_{i-1,j} - 2u_{i,j} + u_{i+1,j}  \right) + \frac{1}{2\Delta x^2} \left( u_{i+1,j-1} - 2u_{i,j-1} + u_{i-1,j-1} \right) = \frac{1}{\Delta t} \left( u_{i,j} - u_{i,j-1} \right) 
+\end{equation}
+
+we can rewrite this a little bit and use $\alpha = \frac{\Delta t}{\Delta x^2}$
+
+\begin{equation}
+  -\alpha u_{i-1,j} + (2 + 2\alpha)u_{i,j} - \alpha u_{i+1,j} = \alpha u_{i+1,j-1} +(2 - 2\alpha) u_{i,j-1} + \alpha u_{i-1,j-1}   
+  \label{eq:crank_nicolson} 
+\end{equation}
+
+We see that the Crank-Nicolson scheme uses three positions in the previous time step to find three new positions in the new time step. The way we solve this equation is quite similar to the way we solve
+the Backward Euler scheme, by writing it on matrix form.
+
+\begin{equation}
+    (2\I + \vec{B}) \vec{V}_j = (2\I - \vec{B})\vec{V}_{j-1},
+    \label{eq:crank_nicolson_matrix}
+\end{equation}
+
+where $\vec{V}_j$ and $\vec{V}_{j-1}$ are the same as for the Backward Euler scheme and 
+
+\begin{equation}
+     \vec{B} = \left( \begin{array}{ccccccc} 
+	2     & -1    &  0    & 0       & \dots   & 0     & 0            \\
+	-1    &  2    & -1    & 0       & \dots   & 0     & 0            \\
+	0     & -1    & 2     & -1      & \dots   & \dots & \dots        \\
+	0     & 0     & \dots & \dots   & \dots   & 0     & 0           \\
+	\dots & \dots & \dots & 0       & -1      & 2     & -1         \\
+	0     & 0     & \dots & 0       & 0       & -1    & 2           \\
+    \end{array} \right)
+    \label{eq:jacobi}
+\end{equation} 
+
+--------------------------------------------------------------------------------------------------------------------------------
+  Trenger litt mer her, men gidder ikke mer nå!\\
+--------------------------------------------------------------------------------------------------------------------------------\\

@@ -1,0 +1,148 @@
+\section{exercise 5a}
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+\begin{align*}
+    \frac{\partial^2 v(x,t)}{\partial x^2} &= \frac{\partial v(x,t)}{\partial t}, \qquad v(x,t) = u(x,t) + u_s(x), \qquad u_s(x) = 1 - x \\
+    \frac{\partial^2}{\partial x^2} \left( u(x,t) + u_s(x) \right) &= \frac{\partial}{\partial t} \left( u(x,t) + u_s(x) \right) \\
+    \frac{\partial^2 u(x,t)}{\partial x^2} + \frac{\partial^2 u_s(x)}{\partial x^2} &= \frac{\partial u(x,t)}{\partial t} + \frac{\partial u_s(x)}{\partial t} \\
+    \frac{\partial^2 u(x,t)}{\partial x^2} + \underbrace{\frac{\partial^2 u_s(x)}{\partial x^2}}_{=0} &= \frac{\partial u(x,t)}{\partial t} + \underbrace{\frac{\partial u_s(x)}{\partial t}}_{=0} \\
+    \frac{\partial^2 u(x,t)}{\partial x^2} &= \frac{\partial u(x,t)}{\partial t}
+\end{align*}
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+
+
+We now want to find the closed form solution to our one-dimensional problem.\\
+We write $u(x,t)$ as a separable function $u(x,t) = F(x)G(t)$, and insert this into eq.(\ref{eq:diff_eq}), and end up
+with the equation
+
+\begin{equation}
+    G(t) \frac{\partial^2 F(x)}{\partial x^2} = F(x) \frac{\partial G(t)}{\partial t}
+\end{equation}
+
+By dividing the equation with $\frac{1}{F(x)G(t)}$ on both sides, we end up with only $x$ dependent functions on the left side, and 
+$t$ dependent functions on the right side
+
+\begin{equation}
+    \frac{1}{F(x)} \frac{\partial^2 F(x)}{\partial x^2} = \frac{1}{G(t)} \frac{\partial G(t)}{\partial t}
+\end{equation}
+
+The right and left side are now independent of each other and we can set them equal each other. For our convenience we call
+this constant $-k^2$
+
+\begin{equation}
+    \frac{1}{F(x)} \frac{\partial^2 F(x)}{\partial x^2} = \frac{1}{G(t)} \frac{\partial G(t)}{\partial t} = -k^2
+\end{equation}
+
+We now have two equations 
+
+\begin{equation}
+    \frac{\partial^2 F(x)}{\partial x^2} k^2 F(x) = 0
+    \label{eq:Sep_F(x)}
+\end{equation}
+
+and 
+
+\begin{equation}
+    \frac{1}{G(t)} \frac{\partial G(t)}{\partial t} = - k^2
+    \label{eq:Sep_G(t)}
+\end{equation}
+
+We'll start by solving eq.(\ref{eq:Sep_F(x)}).\\
+We have been given the boundary conditions in eq.(\ref{eq:boundary_0}) and in eq.(\ref{eq:boundary_d}), but these are not the steady state 
+boundary condition, which we need to get the closed form solution. The steady-state boundary conditions are given as
+
+\begin{equation}
+    v(x) = u(x) - u_s(x), \qquad u_s(x) = 1 - x
+\end{equation}
+
+by inserting the other boundary conditions into this, and by using $d = 1$, we get
+
+\begin{align*}
+    v(0) &= 0 = F(0) \\
+    v(d) &= 0 = F(d)
+\end{align*}
+
+The solution eq.(\ref{eq:Sep_F(x)}) is
+
+\begin{equation}
+ F(x) = A\cos(kx) + B\sin(kx)
+\end{equation}
+
+See Appendix A for steps.\\
+If we now use the boundary condition $F(0) = 0$ we get $A = 0$, and $F(d) = 0$ gives us
+
+\begin{equation}
+ F(d) = B\sin(kd) = 0
+\end{equation}
+
+for this to be true, then $\sin(kd) = 0$, so we must have that 
+\begin{equation}
+  k = \frac{m\pi}{d}, \qquad m = 0,\pm 1, \pm 2, \dots
+\end{equation}
+
+This gives us ,for all $m$, the solution
+
+\begin{equation}
+ F(x) = \sum_{m=1}^{\infty} B_m \sin(\frac{m \pi}{d}x)
+\end{equation}
+and for $d = 1$
+
+\begin{equation}
+ F(x) = \sum_{m=1}^{\infty} B_m \sin(m \pi x)
+\end{equation}
+
+The next step is to solve eq.(\ref{eq:Sep_G(t)}), which has the solution
+
+\begin{equation}
+ G(t) = Ce^{-k^2 t} = Ce^{-m^2 \pi^2 t}
+\end{equation}
+
+Our solution,
+
+--------------------------------------------------------------------------------------------------------------------------------
+\begin{align*}
+    v(x,0) &= \underbrace{u(x,0)}_{=0} + u_s(x) \\
+    v(x,0) &= 1 - x \\
+\end{align*}
+
+\begin{align*}
+    v(x,t) &= \sum_{m=1}^{\infty} B_m \sin(m \pi x)e^{-m^2 \pi^2 t} \\
+    v(x,0) &= \sum_{m=1}^{\infty} B_m \sin(m \pi x) = 1 - x \\
+\end{align*}
+
+If we now use the so called Fouriers trick, multiplying both sides of the equation with $ \sin(n \pi x)$ and taking the integral, we get
+
+\begin{align*}
+    \int_0^d \sin(n \pi x)(1 - x) dx &= \sum_{m=1}^{\infty} B_m \int_0^d \sin(n \pi x)\sin(m \pi x) dx\\
+\end{align*}
+
+Because
+
+\begin{equation}
+  \int_0^d \sin(n \pi x)\sin(m \pi x) dx = \delta_{i,j}
+\end{equation}
+
+ where $\delta_{i,j} = 1$ if $i = j$ and $\delta_{i,j} = 0$ if $i \neq j$ we get
+ 
+ \begin{align*}
+    \int_0^d \sin(n \pi x)(1 - x) dx &= B_n \int_0^d \sin^2(n \pi x) dx\\
+    \frac{1}{n\pi} \int_0^{n\pi} \sin(u)(1 - u) du &= \frac{B_n}{n\pi} \int_0^{n\pi} \sin^2(u) du\\
+    \frac{1}{n\pi} \left[ -cos(u) \right]_0^{n\pi} - \frac{1}{n^2\pi^2} \left[\underbrace{sin(u)}_{=0} -u\cos(u) \right]_0^{n\pi} &= \frac{B_n}{n\pi} \left[ \frac{1}{2}(u -\underbrace{\sin(u) \cos(u)}_{=0}) \right]_0^{n\pi}\\
+    \frac{1}{n\pi} \left( 1 - cos(n\pi) \right) + \frac{1}{n^2\pi^2} \left( n\pi \cos(n\pi) \right) &= \frac{B_n}{n\pi}  \frac{n\pi}{2}\\
+    \frac{1}{n\pi} \left( 1 - cos(n\pi) \right) + \frac{1}{n^2\pi^2} \left( n\pi \cos(n\pi) \right) &= \frac{B_n}{n\pi}  \frac{n\pi}{2}\\
+    \frac{1}{n\pi}  &= \frac{B_n}{2} \\
+    \Rightarrow  B_n &= \frac{2}{n\pi}
+\end{align*}
+
+We now end up with
+
+\begin{equation}
+    v(x,t) = \sum_{n=1}^{\infty} \frac{2}{n\pi} \sin(n \pi x)e^{-n^2 \pi^2 t} \\
+\end{equation}
+--------------------------------------------------------------------------------------------------------------------------------

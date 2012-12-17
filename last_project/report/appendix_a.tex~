@@ -1,0 +1,63 @@
+\section{Appendix A}
+
+\begin{equation}
+    \frac{\partial^2 F(x)}{\partial x^2} + k^2 F(x) = 0
+\end{equation}
+
+Assume that the solution, $F(x)$, will be proportional to $e^{\lambda x}$.\\
+We substitute $F(x) = e^{\lambda x}$ into our equation.
+
+\begin{equation}
+    \frac{\partial^2}{\partial x^2}(e^{\lambda x}) + k^2 e^{\lambda x} = 0
+\end{equation}
+
+$\frac{\partial^2}{\partial x^2}(e^{\lambda x})$ is easy to derivate, and the solution is 
+
+\begin{equation}
+    \frac{\partial^2}{\partial x^2}(e^{\lambda x}) = \lambda^2 e^{\lambda x}
+\end{equation}
+
+we now have the equation
+
+\begin{equation}
+ \lambda^2 e^{\lambda x} + k^2 e^{\lambda x} = (\lambda^2 + k^2)  e^{\lambda x} = 0
+\end{equation}
+
+Because $e^{\lambda x}$ can never be zero, the solution to this equation must be $\lambda^2 + k^2 = 0$, so we get $\lambda = ik$ and $\lambda = -ik$.\\
+This gives us
+
+\begin{equation}
+ F_1(x) = C_1 e^{ikx}
+\end{equation}
+
+and 
+
+\begin{equation}
+ F_2(x) = C_2 e^{-ikx}
+\end{equation}
+
+our general solution is 
+
+\begin{equation}
+ F(x) = C_1 e^{ikx} + C_2 e^{-ikx}
+\end{equation}
+
+If we now apply Euler's identity $e^{\alpha + i\beta} = e^{\alpha}\cos(\beta) + ie^{\alpha}\sin(\beta)$, we have $\alpha = 0$ and $\beta = \pm kx$.\\
+Now we get
+
+\begin{equation}
+ F(x) = C_1(\cos(kx) + i\sin(kx)) + C_2(\cos(kx) - i\sin(kx))
+\end{equation}
+
+this can be rewritten to
+
+\begin{equation}
+ F(x) = (C_1 + C_2)\cos(kx) + i(C_1 - C_2)\sin(kx)
+\end{equation}
+
+$(C_1 + C_2)$ and $i(C_1 - C_2)$ are only some constant, and can be rewritten to som new constants $A$ and $B$ respectively.\\
+The final solution to the differential equation is
+
+\begin{equation}
+ F(x) = A\cos(kx) + B\sin(kx)
+\end{equation}
